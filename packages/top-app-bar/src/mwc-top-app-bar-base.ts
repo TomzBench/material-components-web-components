@@ -17,7 +17,10 @@ limitations under the License.
 import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation.js';
 import {property} from 'lit-element';
 
-import {passiveEventOptionsIfSupported, TopAppBarBaseBase} from './mwc-top-app-bar-base-base.js';
+import {
+  passiveEventOptionsIfSupported,
+  TopAppBarBaseBase
+} from './mwc-top-app-bar-base-base.js';
 
 export class TopAppBarBase extends TopAppBarBaseBase {
   protected mdcFoundationClass = MDCTopAppBarFoundation;
@@ -27,15 +30,18 @@ export class TopAppBarBase extends TopAppBarBaseBase {
 
   @property({type: Boolean, reflect: true}) dense = false;
 
+  @property({type: String, reflect: true}) theme = '';
+
   protected handleResize = () => {
     this.mdcFoundation.handleWindowResize();
   };
 
   protected barClasses() {
     return {
+      [`${this.theme}`]: this.theme.length ? true : false,
       'mdc-top-app-bar--dense': this.dense,
       'mdc-top-app-bar--prominent': this.prominent,
-      'center-title': this.centerTitle,
+      'center-title': this.centerTitle
     };
   }
 
@@ -45,14 +51,17 @@ export class TopAppBarBase extends TopAppBarBaseBase {
       'mdc-top-app-bar--dense-fixed-adjust': this.dense && !this.prominent,
       'mdc-top-app-bar--prominent-fixed-adjust': !this.dense && this.prominent,
       'mdc-top-app-bar--dense-prominent-fixed-adjust':
-          this.dense && this.prominent,
+        this.dense && this.prominent
     };
   }
 
   protected registerListeners() {
     super.registerListeners();
     window.addEventListener(
-        'resize', this.handleResize, passiveEventOptionsIfSupported);
+      'resize',
+      this.handleResize,
+      passiveEventOptionsIfSupported
+    );
   }
 
   protected unregisterListeners() {
