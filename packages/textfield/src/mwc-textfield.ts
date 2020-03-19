@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {customElement} from 'lit-element';
+import {customElement, unsafeCSS} from 'lit-element';
 import {TextFieldBase} from './mwc-textfield-base.js';
 import {style} from './mwc-textfield-css.js';
 
@@ -31,3 +31,11 @@ declare global {
 export class TextField extends TextFieldBase {
   static styles = style;
 }
+
+export const textField = (userStyles: string): any => {
+  @customElement('mwcs-textfield')
+  class TextFieldS extends TextFieldBase {
+    static styles = [unsafeCSS(userStyles), style];
+  }
+  return TextFieldS;
+};
