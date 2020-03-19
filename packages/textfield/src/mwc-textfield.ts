@@ -29,10 +29,10 @@ declare global {
 
 @customElement('mwc-textfield')
 export class TextField extends TextFieldBase {
-  static styles = style;
+  static styles = [style];
 }
 
-export const textField = (userStyles: string): any => {
+export const textField = (userStyles: string): typeof TextField => {
   @customElement('mwcs-textfield')
   class TextFieldS extends TextFieldBase {
     static styles = [unsafeCSS(userStyles), style];
