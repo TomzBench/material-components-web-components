@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {FabBase} from './mwc-fab-base.js';
 import {style} from './mwc-fab-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Fab extends FabBase {
   static styles = style;
 }
+
+export const fabWithStyles = (userStyles: string) =>
+  withStyles(Fab, 'm-fab', userStyles, style);

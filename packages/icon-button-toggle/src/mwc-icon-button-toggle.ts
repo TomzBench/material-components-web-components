@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import {style} from '@material/mwc-icon-button/mwc-icon-button-css';
+import {withStyles} from '@material/mwc-base/base-element.js';
 import {customElement} from 'lit-element';
 
 import {IconButtonToggleBase} from './mwc-icon-button-toggle-base.js';
@@ -30,3 +31,6 @@ declare global {
 export class IconButtonToggle extends IconButtonToggleBase {
   static styles = style;
 }
+
+export const iconButtonToggleWithStyles = (userStyles: string) =>
+  withStyles(IconButtonToggle, 'm-icon-button-toggle', userStyles, style);

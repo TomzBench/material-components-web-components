@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {customElement, unsafeCSS} from 'lit-element';
+import {customElement} from 'lit-element';
 import {TextFieldBase} from './mwc-textfield-base.js';
 import {style} from './mwc-textfield-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 export {TextFieldType} from './mwc-textfield-base.js';
 
@@ -32,10 +33,5 @@ export class TextField extends TextFieldBase {
   static styles = [style];
 }
 
-export const textField = (userStyles: string): typeof TextField => {
-  @customElement('mwcs-textfield')
-  class TextFieldS extends TextFieldBase {
-    static styles = [unsafeCSS(userStyles), style];
-  }
-  return TextFieldS;
-};
+export const textFieldWithStyles = (userStyles: string) =>
+  withStyles(TextField, 'm-textfield', userStyles, style);

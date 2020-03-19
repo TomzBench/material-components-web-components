@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {DialogBase} from './mwc-dialog-base.js';
 import {style} from './mwc-dialog-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Dialog extends DialogBase {
   static styles = style;
 }
+
+export const dialogWithStyles = (userStyles: string) =>
+  withStyles(Dialog, 'm-dialog', userStyles, style);

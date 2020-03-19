@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {RippleBase} from './mwc-ripple-base.js';
 import {style} from './mwc-ripple-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -30,3 +31,6 @@ declare global {
 export class Ripple extends RippleBase {
   static styles = style;
 }
+
+export const rippleWithStyles = (userStyles: string) =>
+  withStyles(Ripple, 'm-ripple', userStyles, style);

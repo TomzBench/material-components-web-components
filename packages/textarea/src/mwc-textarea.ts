@@ -18,6 +18,7 @@ limitations under the License.
 import {customElement} from 'lit-element';
 import {TextAreaBase} from './mwc-textarea-base.js';
 import {style} from './mwc-textarea-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 export {TextFieldType} from '@material/mwc-textfield/mwc-textfield-base.js';
 
@@ -31,3 +32,6 @@ declare global {
 export class TextArea extends TextAreaBase {
   static styles = style;
 }
+
+export const textAreaWithStyles = (userStyles: string) =>
+  withStyles(TextArea, 'm-textarea', userStyles, style);

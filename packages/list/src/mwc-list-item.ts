@@ -19,6 +19,7 @@ import {customElement} from 'lit-element';
 
 import {ListItemBase} from './mwc-list-item-base.js';
 import {style} from './mwc-list-item-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 export {GraphicType, RequestSelectedDetail} from './mwc-list-item-base.js';
 declare global {
@@ -31,3 +32,6 @@ declare global {
 export class ListItem extends ListItemBase {
   static styles = style;
 }
+
+export const listItemWithStyles = (userStyles: string) =>
+  withStyles(ListItem, 'm-list-item', userStyles, style);

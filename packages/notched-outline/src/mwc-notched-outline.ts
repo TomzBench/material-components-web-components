@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {NotchedOutlineBase} from './mwc-notched-outline-base.js';
 import {style} from './mwc-notched-outline-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class NotchedOutline extends NotchedOutlineBase {
   static styles = style;
 }
+
+export const notchedOutlineWithStyles = (userStyles: string) =>
+  withStyles(NotchedOutline, 'm-notched-outline', userStyles, style);

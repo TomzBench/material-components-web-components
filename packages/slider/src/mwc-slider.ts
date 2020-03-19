@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {SliderBase} from './mwc-slider-base.js';
 import {style} from './mwc-slider-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Slider extends SliderBase {
   static styles = style;
 }
+
+export const sliderWithStyles = (userStyles: string) =>
+  withStyles(Slider, 'm-slider', userStyles, style);

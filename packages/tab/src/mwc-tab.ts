@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {TabBase} from './mwc-tab-base.js';
 import {style} from './mwc-tab-css';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Tab extends TabBase {
   static styles = style;
 }
+
+export const tabWithStyles = (userStyles: string) =>
+  withStyles(Tab, 'm-tab', userStyles, style);

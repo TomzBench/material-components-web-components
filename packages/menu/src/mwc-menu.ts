@@ -19,9 +19,15 @@ import {customElement} from 'lit-element';
 
 import {MenuBase} from './mwc-menu-base.js';
 import {style} from './mwc-menu-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 export {DefaultFocusState} from '@material/menu/constants.js';
-export {createSetFromIndex, isEventMulti, isIndexSet, MWCListIndex} from '@material/mwc-list/mwc-list-foundation.js';
+export {
+  createSetFromIndex,
+  isEventMulti,
+  isIndexSet,
+  MWCListIndex
+} from '@material/mwc-list/mwc-list-foundation.js';
 export {Corner} from './mwc-menu-surface-base.js';
 
 declare global {
@@ -34,3 +40,6 @@ declare global {
 export class Menu extends MenuBase {
   static styles = style;
 }
+
+export const menuWithStyles = (userStyles: string) =>
+  withStyles(Menu, 'm-menu', userStyles, style);

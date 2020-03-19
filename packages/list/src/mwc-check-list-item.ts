@@ -20,6 +20,7 @@ import {customElement} from 'lit-element';
 import {CheckListItemBase} from './mwc-check-list-item-base.js';
 import {style as controlStyle} from './mwc-control-list-item-css.js';
 import {style} from './mwc-list-item-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -31,3 +32,6 @@ declare global {
 export class CheckListItem extends CheckListItemBase {
   static styles = [style, controlStyle];
 }
+
+export const checkListItemWithStyles = (userStyles: string) =>
+  withStyles(CheckListItem, 'm-check-list-item', userStyles, style);

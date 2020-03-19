@@ -18,6 +18,7 @@ limitations under the License.
 import {customElement} from 'lit-element';
 import {SelectBase} from './mwc-select-base.js';
 import {style} from './mwc-select-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Select extends SelectBase {
   static styles = style;
 }
+
+export const selectWithStyles = (userStyles: string) =>
+  withStyles(Select, 'm-select', userStyles, style);

@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {style} from '@material/mwc-top-app-bar/mwc-top-app-bar-css';
+import {withStyles} from '@material/mwc-base/base-element.js';
 import {customElement} from 'lit-element';
 
 import {TopAppBarFixedBase} from './mwc-top-app-bar-fixed-base.js';
@@ -29,3 +30,6 @@ declare global {
 export class TopAppBarFixed extends TopAppBarFixedBase {
   static styles = style;
 }
+
+export const topAppBarFixedWithStyles = (userStyles: string) =>
+  withStyles(TopAppBarFixed, 'm-top-app-bar-fixed', userStyles, style);

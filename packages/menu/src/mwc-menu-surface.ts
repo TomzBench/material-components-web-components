@@ -18,6 +18,7 @@ limitations under the License.
 import {customElement} from 'lit-element';
 import {MenuSurfaceBase} from './mwc-menu-surface-base.js';
 import {style} from './mwc-menu-surface-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 export {MDCMenuDistance} from '@material/menu-surface/types.js';
 export {Corner} from './mwc-menu-surface-base.js';
@@ -32,3 +33,6 @@ declare global {
 export class MenuSurface extends MenuSurfaceBase {
   static styles = style;
 }
+
+export const menuSurfaceWithStyles = (userStyles: string) =>
+  withStyles(MenuSurface, 'm-menu-surface', userStyles, style);

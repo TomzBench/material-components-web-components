@@ -19,6 +19,7 @@ import {customElement} from 'lit-element';
 
 import {IconButtonBase} from './mwc-icon-button-base.js';
 import {style} from './mwc-icon-button-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -30,3 +31,6 @@ declare global {
 export class IconButton extends IconButtonBase {
   static styles = style;
 }
+
+export const iconButtonWithStyles = (userStyles: string) =>
+  withStyles(IconButton, 'm-icon-button', userStyles, style);

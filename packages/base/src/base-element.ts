@@ -16,11 +16,15 @@ limitations under the License.
 */
 
 import {MDCFoundation} from '@material/base';
-import {LitElement} from 'lit-element';
+import {LitElement, customElement, unsafeCSS, CSSResult} from 'lit-element';
 
 import {Constructor} from './utils.js';
 
-export {CustomEventListener, EventType, SpecificEventListener} from '@material/base/types.js';
+export {
+  CustomEventListener,
+  EventType,
+  SpecificEventListener
+} from '@material/base/types.js';
 export {addHasRemoveClass} from './utils.js';
 
 export abstract class BaseElement extends LitElement {
@@ -52,7 +56,7 @@ export abstract class BaseElement extends LitElement {
    *      ...
    *    }
    */
-  protected abstract createAdapter(): {}
+  protected abstract createAdapter(): {};
 
   /**
    * Create and attach the MDC Foundation to the instance
@@ -71,3 +75,16 @@ export abstract class BaseElement extends LitElement {
     this.createFoundation();
   }
 }
+
+export const withStyles = <T extends LitElement>(
+  superClass: Constructor<T>,
+  name: string,
+  user: string,
+  mwc: CSSResult
+): any => {
+  @customElement(name)
+  class C extends (superClass as Constructor<LitElement>) {
+    static styles = [unsafeCSS(user), mwc];
+  }
+  return C;
+};

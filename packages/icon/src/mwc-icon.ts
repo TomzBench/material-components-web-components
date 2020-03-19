@@ -17,13 +17,16 @@ limitations under the License.
 import {customElement, html, LitElement} from 'lit-element';
 
 import {style} from './mwc-icon-host-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 @customElement('mwc-icon')
 export class Icon extends LitElement {
   static styles = style;
 
   protected render() {
-    return html`<slot></slot>`;
+    return html`
+      <slot></slot>
+    `;
   }
 }
 
@@ -32,3 +35,6 @@ declare global {
     'mwc-icon': Icon;
   }
 }
+
+export const iconWithStyles = (userStyles: string) =>
+  withStyles(Icon, 'm-icon', userStyles, style);

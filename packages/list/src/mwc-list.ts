@@ -19,8 +19,14 @@ import {customElement} from 'lit-element';
 
 import {ListBase} from './mwc-list-base.js';
 import {style} from './mwc-list-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
-export {createSetFromIndex, isEventMulti, isIndexSet, MWCListIndex} from './mwc-list-foundation.js';
+export {
+  createSetFromIndex,
+  isEventMulti,
+  isIndexSet,
+  MWCListIndex
+} from './mwc-list-foundation.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -32,3 +38,6 @@ declare global {
 export class List extends ListBase {
   static styles = style;
 }
+
+export const listWithStyles = (userStyles: string) =>
+  withStyles(List, 'm-list', userStyles, style);

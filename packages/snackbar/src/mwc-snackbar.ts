@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {SnackbarBase} from './mwc-snackbar-base.js';
 import {style} from './mwc-snackbar-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Snackbar extends SnackbarBase {
   static styles = style;
 }
+
+export const snackbarWithStyles = (userStyles: string) =>
+  withStyles(Snackbar, 'm-snackbar', userStyles, style);

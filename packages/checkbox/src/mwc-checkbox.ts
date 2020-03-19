@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {CheckboxBase} from './mwc-checkbox-base.js';
 import {style} from './mwc-checkbox-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Checkbox extends CheckboxBase {
   static styles = style;
 }
+
+export const checkboxWithStyles = (userStyles: string) =>
+  withStyles(Checkbox, 'm-checkbox', userStyles, style);

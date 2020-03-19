@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {TopAppBarBase} from './mwc-top-app-bar-base.js';
 import {style} from './mwc-top-app-bar-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class TopAppBar extends TopAppBarBase {
   static styles = style;
 }
+
+export const topAppBarWithStyles = (userStyles: string) =>
+  withStyles(TopAppBar, 'm-top-app-bar', userStyles, style);

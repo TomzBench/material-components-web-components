@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {LinearProgressBase} from './mwc-linear-progress-base.js';
 import {style} from './mwc-linear-progress-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class LinearProgress extends LinearProgressBase {
   static styles = style;
 }
+
+export const linearProgressWithStyles = (userStyles: string) =>
+  withStyles(LinearProgress, 'm-linear-progress', userStyles, style);

@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {SwitchBase} from './mwc-switch-base.js';
 import {style} from './mwc-switch-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Switch extends SwitchBase {
   static styles = style;
 }
+
+export const switchWithStyles = (userStyles: string) =>
+  withStyles(Switch, 'm-switch', userStyles, style);

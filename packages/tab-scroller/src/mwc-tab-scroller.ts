@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {TabScrollerBase} from './mwc-tab-scroller-base.js';
 import {style} from './mwc-tab-scroller-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class TabScroller extends TabScrollerBase {
   static styles = style;
 }
+
+export const tabScrollerWithStyles = (userStyles: string) =>
+  withStyles(TabScroller, 'm-tab-scroller', userStyles, style);

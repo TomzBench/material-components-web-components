@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {FormfieldBase} from './mwc-formfield-base.js';
 import {style} from './mwc-formfield-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Formfield extends FormfieldBase {
   static styles = style;
 }
+
+export const formfieldWithStyles = (userStyles: string) =>
+  withStyles(Formfield, 'm-formfield', userStyles, style);

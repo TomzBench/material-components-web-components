@@ -20,6 +20,7 @@ import {customElement} from 'lit-element';
 import {style as controlStyle} from './mwc-control-list-item-css.js';
 import {style} from './mwc-list-item-css.js';
 import {RadioListItemBase} from './mwc-radio-list-item-base.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -31,3 +32,6 @@ declare global {
 export class RadioListItem extends RadioListItemBase {
   static styles = [style, controlStyle];
 }
+
+export const radioListItemWithStyles = (userStyles: string) =>
+  withStyles(RadioListItem, 'm-radio-list-item', userStyles, style);

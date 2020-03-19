@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {RadioBase} from './mwc-radio-base.js';
 import {style} from './mwc-radio-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Radio extends RadioBase {
   static styles = style;
 }
+
+export const radioWithStyles = (userStyles: string) =>
+  withStyles(Radio, 'm-radio', userStyles, style);

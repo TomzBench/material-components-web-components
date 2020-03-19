@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {DrawerBase} from './mwc-drawer-base.js';
 import {style} from './mwc-drawer-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class Drawer extends DrawerBase {
   static styles = style;
 }
+
+export const drawerWithStyles = (userStyles: string) =>
+  withStyles(Drawer, 'm-drawer', userStyles, style);

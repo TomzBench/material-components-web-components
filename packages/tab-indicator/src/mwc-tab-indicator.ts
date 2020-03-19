@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {TabIndicatorBase} from './mwc-tab-indicator-base.js';
 import {style} from './mwc-tab-indicator-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -29,3 +30,6 @@ declare global {
 export class TabIndicator extends TabIndicatorBase {
   static styles = style;
 }
+
+export const tabIndicatorWithStyles = (userStyles: string) =>
+  withStyles(TabIndicator, 'm-tab-indicator', userStyles, style);

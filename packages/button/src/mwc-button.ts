@@ -18,6 +18,7 @@ import {customElement} from 'lit-element';
 
 import {ButtonBase} from './mwc-button-base.js';
 import {style} from './mwc-button-css.js';
+import {withStyles} from '@material/mwc-base/base-element.js';
 
 @customElement('mwc-button')
 export class Button extends ButtonBase {
@@ -29,3 +30,6 @@ declare global {
     'mwc-button': Button;
   }
 }
+
+export const buttonWithStyles = (userStyles: string) =>
+  withStyles(Button, 'm-button', userStyles, style);
