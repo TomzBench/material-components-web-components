@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+- Update `lit-element` dependency to `2.3.0` for all components.
+
+### Fixed
+
+## [v0.14.0] - 2020-03-19
+
+### Added
+
 - `inputMode` to `mwc-textfield` and `mwc-textarea`
 - `readOnly` to `mwc-textfield` and `mwc-textarea`
 - CSS custom properties for typography
@@ -21,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Exposed --mdc-shape-medium on mwc-menu-surface
 - Added `focusOnActivate` property to `mwc-tab`
   - `true` by default, set to `false` to disable focusing on tab activation
+- mwc-select now has --mdc-select-disabled-dropdown-icon-color
 
 ### Changed
 
