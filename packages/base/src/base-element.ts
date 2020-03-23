@@ -90,7 +90,7 @@ export const withStyles = <T extends LitElement>(
 ): any => {
   @customElement(name)
   class C extends (superClass as Constructor<LitElement>) {
-    static styles = [unsafeCSS(user), mwc];
+    static styles = [mwc, unsafeCSS(user)];
   }
   return C;
 };
