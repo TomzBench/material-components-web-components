@@ -78,7 +78,7 @@ export abstract class BaseElement extends LitElement {
 
 export const classMapFromString = (classes: string) => {
   let ret = {};
-  classes.split(' ').forEach(key => ret[key] = true);
+  if(classes.length) classes.split(' ').forEach(key => ret[key] = true);
   return ret;
 }
 
