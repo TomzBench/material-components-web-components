@@ -16,6 +16,7 @@ limitations under the License.
 */
 import '@material/mwc-icon';
 
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 import {HTMLElementWithRipple} from '@material/mwc-base/form-element';
 import {rippleNode} from '@material/mwc-ripple/ripple-directive.js';
 import {html, LitElement, property, query} from 'lit-element';
@@ -39,6 +40,8 @@ export class ButtonBase extends LitElement {
   @property({type: String}) icon = '';
 
   @property({type: String}) label = '';
+
+  @property({type: String}) classes = '';
 
   @query('#button') buttonElement!: HTMLElementWithRipple;
 
@@ -71,12 +74,12 @@ export class ButtonBase extends LitElement {
   }
 
   protected render() {
-    const classes = {
+    const classes = Object.assign({},{
       'mdc-button--raised': this.raised,
       'mdc-button--unelevated': this.unelevated,
       'mdc-button--outlined': this.outlined,
       'mdc-button--dense': this.dense,
-    };
+    }, classMapFromString(this.classes));
     return html`
       <button
           id="button"
