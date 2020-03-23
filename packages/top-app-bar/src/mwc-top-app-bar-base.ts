@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation.js';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 import {property} from 'lit-element';
 
 import {
@@ -30,19 +31,18 @@ export class TopAppBarBase extends TopAppBarBaseBase {
 
   @property({type: Boolean, reflect: true}) dense = false;
 
-  @property({type: String, reflect: true}) theme = '';
+  @property({type: String, reflect: true}) classes = '';
 
   protected handleResize = () => {
     this.mdcFoundation.handleWindowResize();
   };
 
   protected barClasses() {
-    return {
-      [`${this.theme}`]: this.theme.length ? true : false,
+    return Object.assign({}, {
       'mdc-top-app-bar--dense': this.dense,
       'mdc-top-app-bar--prominent': this.prominent,
       'center-title': this.centerTitle
-    };
+    }, classMapFromString(this.classes));
   }
 
   protected contentClasses() {

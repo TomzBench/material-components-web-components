@@ -76,6 +76,12 @@ export abstract class BaseElement extends LitElement {
   }
 }
 
+export const classMapFromString = (classes: string) => {
+  let ret = {};
+  classes.split(' ').forEach(key => ret[key] = true);
+  return ret;
+}
+
 export const withStyles = <T extends LitElement>(
   superClass: Constructor<T>,
   name: string,

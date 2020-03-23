@@ -16,6 +16,7 @@ limitations under the License.
 */
 import '@material/mwc-notched-outline';
 
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 import {MDCFloatingLabelFoundation} from '@material/floating-label/foundation.js';
 import {MDCLineRippleFoundation} from '@material/line-ripple/foundation.js';
 import {addHasRemoveClass, FormElement} from '@material/mwc-base/form-element.js';
@@ -121,6 +122,8 @@ export abstract class TextFieldBase extends FormElement {
 
   @query('.mdc-text-field-character-counter')
   protected charCounterElement!: CharacterCounter;
+
+  @property({type: String}) classes = '';
 
   @property({type: String}) value = '';
 
@@ -238,7 +241,7 @@ export abstract class TextFieldBase extends FormElement {
   }
 
   render() {
-    const classes = {
+    const classes = Object.assign({}, {
       'mdc-text-field--disabled': this.disabled,
       'mdc-text-field--no-label': !this.label,
       'mdc-text-field--outlined': this.outlined,
@@ -246,7 +249,7 @@ export abstract class TextFieldBase extends FormElement {
       'mdc-text-field--with-leading-icon': this.icon,
       'mdc-text-field--with-trailing-icon': this.iconTrailing,
       'mdc-text-field--end-aligned': this.endAligned,
-    };
+    }, classMapFromString(this.classes));
 
     const ripple =
         !this.outlined ? html`<div class="mdc-text-field__ripple"></div>` : '';
