@@ -20,6 +20,7 @@ import '@material/mwc-checkbox';
 import {Checkbox} from '@material/mwc-checkbox';
 import {html, property, query} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 
 import {GraphicType, ListItemBase} from './mwc-list-item-base.js';
 
@@ -27,14 +28,15 @@ export class CheckListItemBase extends ListItemBase {
   @query('slot') protected slotElement!: HTMLSlotElement|null;
   @query('mwc-checkbox') protected checkboxElement!: Checkbox;
 
+  @property({type: String}) classes = '';
   @property({type: Boolean}) left = false;
   @property({type: String, reflect: true}) graphic: GraphicType = 'control';
 
   render() {
-    const checkboxClasses = {
+    const checkboxClasses = Object.assign({}, {
       'mdc-list-item__graphic': this.left,
       'mdc-list-item__meta': !this.left,
-    };
+    }, classMapFromString(this.classes));
 
     const text = this.renderText();
     const graphic = this.graphic && this.graphic !== 'control' && !this.left ?

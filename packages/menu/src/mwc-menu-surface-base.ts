@@ -23,6 +23,7 @@ import {observer} from '@material/mwc-base/observer.js';
 import {deepActiveElementPath, doesElementContainFocus} from '@material/mwc-base/utils';
 import {html, property, query} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 
 export type Corner = keyof typeof CornerEnum;
 export type AnchorableElement = HTMLElement&{anchor: Element | null};
@@ -51,6 +52,8 @@ export abstract class MenuSurfaceBase extends BaseElement {
   @query('.mdc-menu-surface') mdcRoot!: HTMLDivElement;
 
   @query('slot') slotElement!: HTMLSlotElement|null;
+
+  @property({type: String}) classes = '';
 
   @property({type: Boolean})
   @observer(function(this: MenuSurfaceBase, isAbsolute: boolean) {
@@ -131,10 +134,10 @@ export abstract class MenuSurfaceBase extends BaseElement {
   protected onBodyClickBound: (evt: MouseEvent) => void = () => undefined;
 
   render() {
-    const classes = {
+    const classes = Object.assign({}, {
       'mdc-menu-surface--fixed': this.fixed,
       'fullwidth': this.fullwidth,
-    };
+    }, classMapFromString(this.classes));
 
     return html`
       <div

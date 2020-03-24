@@ -18,6 +18,8 @@
 import {observer} from '@material/mwc-base/observer';
 import {rippleNode} from '@material/mwc-ripple/ripple-directive';
 import {html, LitElement, property, query} from 'lit-element';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
+import {classMap} from 'lit-html/directives/class-map.js';
 
 export type SelectionSource = 'interaction'|'property';
 export interface RequestSelectedDetail {
@@ -34,6 +36,7 @@ export type GraphicType = 'avatar'|'icon'|'medium'|'large'|'control'|null;
 export class ListItemBase extends LitElement {
   @query('slot') protected slotElement!: HTMLSlotElement|null;
 
+  @property({type: String}) classes = '';
   @property({type: String}) value = '';
   @property({type: String, reflect: true}) group: string|null = null;
   @property({type: Number, reflect: true}) tabindex = -1;
@@ -98,11 +101,14 @@ export class ListItemBase extends LitElement {
     const text = this.renderText();
     const graphic = this.graphic ? this.renderGraphic() : html``;
     const meta = this.hasMeta ? this.renderMeta() : html``;
+    const classes = classMapFromString(this.classes);
 
     return html`
-      ${graphic}
-      ${text}
-      ${meta}`;
+      <li class="${classMap(classes)} mdc-list-item">
+        ${graphic}
+        ${text}
+        ${meta}
+      </li>`;
   }
 
   protected renderGraphic() {

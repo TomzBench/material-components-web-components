@@ -16,8 +16,12 @@ limitations under the License.
 */
 import {ripple} from '@material/mwc-ripple/ripple-directive.js';
 import {html, LitElement, property} from 'lit-element';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
+import {classMap} from 'lit-html/directives/class-map.js';
 
 export class IconButtonBase extends LitElement {
+  @property({type: String}) classes = '';
+
   @property({type: Boolean, reflect: true}) disabled = false;
 
   @property({type: String}) icon = '';
@@ -25,9 +29,10 @@ export class IconButtonBase extends LitElement {
   @property({type: String}) label = '';
 
   protected render() {
+    const classes = classMapFromString(this.classes);
     return html`<button
     .ripple="${ripple()}"
-    class="mdc-icon-button"
+    class="${classMap(classes)} mdc-icon-button"
     aria-label="${this.label || this.icon}"
     ?disabled="${this.disabled}">
     <i class="material-icons">${this.icon}</i>

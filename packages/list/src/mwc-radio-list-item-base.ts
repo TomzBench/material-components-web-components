@@ -20,6 +20,7 @@ import '@material/mwc-radio';
 import {Radio} from '@material/mwc-radio';
 import {html, property, query} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
 import {ifDefined} from 'lit-html/directives/if-defined.js';
 
 import {GraphicType, ListItemBase} from './mwc-list-item-base.js';
@@ -28,16 +29,17 @@ export class RadioListItemBase extends ListItemBase {
   @query('slot') protected slotElement!: HTMLSlotElement|null;
   @query('mwc-radio') protected radioElement!: Radio;
 
+  @property({type: String}) classes = '';
   @property({type: Boolean}) left = false;
   @property({type: String, reflect: true}) graphic: GraphicType = 'control';
 
   protected _changeFromClick = false;
 
   render() {
-    const radioClasses = {
+    const radioClasses = Object.assign({}, {
       'mdc-list-item__graphic': this.left,
       'mdc-list-item__meta': !this.left,
-    };
+    }, classMapFromString(this.classes));
 
     const text = this.renderText();
     const graphic = this.graphic && this.graphic !== 'control' && !this.left ?

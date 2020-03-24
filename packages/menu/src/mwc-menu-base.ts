@@ -17,6 +17,8 @@ limitations under the License.
 import '@material/mwc-list';
 import './mwc-menu-surface';
 
+import {classMapFromString} from '@material/mwc-base/base-element.js';
+import {classMap} from 'lit-html/directives/class-map.js';
 import {MDCMenuAdapter} from '@material/menu/adapter.js';
 import {DefaultFocusState as DefaultFocusStateEnum} from '@material/menu/constants.js';
 import MDCMenuFoundation from '@material/menu/foundation.js';
@@ -51,6 +53,8 @@ export abstract class MenuBase extends BaseElement {
   @query('.mdc-menu') mdcRoot!: MenuSurface;
 
   @query('slot') slotElement!: HTMLSlotElement|null;
+
+  @property({type: String}) classes = '';
 
   @property({type: Object}) anchor: HTMLElement|null = null;
 
@@ -144,7 +148,9 @@ export abstract class MenuBase extends BaseElement {
           .absolute=${this.absolute}
           .fixed=${this.fixed}
           .fullwidth=${this.fullwidth}
-          class="mdc-menu mdc-menu-surface"
+          class="${classMap(
+            classMapFromString(this.classes)
+          )} mdc-menu mdc-menu-surface"
           @closed=${this.onClosed}
           @opened=${this.onOpened}
           @keydown=${this.onKeydown}>

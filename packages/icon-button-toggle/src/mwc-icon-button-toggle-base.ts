@@ -21,6 +21,8 @@ import {addHasRemoveClass, BaseElement} from '@material/mwc-base/base-element.js
 import {observer} from '@material/mwc-base/observer.js';
 import {ripple} from '@material/mwc-ripple/ripple-directive.js';
 import {html, property, query} from 'lit-element';
+import {classMapFromString} from '@material/mwc-base/base-element.js';
+import {classMap} from 'lit-html/directives/class-map.js';
 
 export class IconButtonToggleBase extends BaseElement {
   protected mdcFoundationClass = MDCIconButtonToggleFoundation;
@@ -28,6 +30,8 @@ export class IconButtonToggleBase extends BaseElement {
   protected mdcFoundation!: MDCIconButtonToggleFoundation;
 
   @query('.mdc-icon-button') protected mdcRoot!: HTMLElement;
+
+  @property({type: String}) classes = '';
 
   @property({type: String}) label = '';
 
@@ -66,10 +70,11 @@ export class IconButtonToggleBase extends BaseElement {
   }
 
   protected render() {
+    const classes = classMapFromString(this.classes);
     return html`
       <button
         .ripple="${ripple()}"
-        class="mdc-icon-button"
+        class="${classMap(classes)} mdc-icon-button"
         @click="${this.handleClick}"
         aria-hidden="true"
         aria-label="${this.label}"
