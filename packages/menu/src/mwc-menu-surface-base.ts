@@ -23,7 +23,6 @@ import {observer} from '@material/mwc-base/observer.js';
 import {deepActiveElementPath, doesElementContainFocus} from '@material/mwc-base/utils';
 import {html, property, query} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
-import {classMapFromString} from '@material/mwc-base/base-element.js';
 
 export type Corner = keyof typeof CornerEnum;
 export type AnchorableElement = HTMLElement&{anchor: Element | null};
@@ -52,8 +51,6 @@ export abstract class MenuSurfaceBase extends BaseElement {
   @query('.mdc-menu-surface') mdcRoot!: HTMLDivElement;
 
   @query('slot') slotElement!: HTMLSlotElement|null;
-
-  @property({type: String}) classes = '';
 
   @property({type: Boolean})
   @observer(function(this: MenuSurfaceBase, isAbsolute: boolean) {
@@ -134,10 +131,10 @@ export abstract class MenuSurfaceBase extends BaseElement {
   protected onBodyClickBound: (evt: MouseEvent) => void = () => undefined;
 
   render() {
-    const classes = Object.assign({}, {
+    const classes = {
       'mdc-menu-surface--fixed': this.fixed,
-      'fullwidth': this.fullwidth,
-    }, classMapFromString(this.classes));
+      'mdc-menu-surface--fullwidth': this.fullwidth,
+    };
 
     return html`
       <div
@@ -278,7 +275,9 @@ export abstract class MenuSurfaceBase extends BaseElement {
 
   protected registerBodyClick() {
     this.onBodyClickBound = this.onBodyClick.bind(this);
-    document.body.addEventListener('click', this.onBodyClickBound);
+    // capture otherwise listener closes menu after quick menu opens
+    document.body.addEventListener(
+        'click', this.onBodyClickBound, {passive: true, capture: true});
   }
 
   protected deregisterBodyClick() {

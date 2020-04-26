@@ -14,7 +14,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {Ripple} from './mwc-ripple.js';
+
+import {RippleInterface} from '@material/mwc-base/utils.js';
+
+export interface RippleAPI extends RippleInterface {
+  startHover: () => void;
+  endHover: () => void;
+}
 
 /**
  * Class that encapsulates the events handlers for `mwc-ripple`
@@ -32,52 +38,52 @@ import {Ripple} from './mwc-ripple.js';
  *
  *   render() {
  *     return html`
- *       <div @mousedown=${this.rippleHandlers.activate}></div>
+ *       <div @mousedown=${this.rippleHandlers.startPress}></div>
  *       ${this.renderRipple ? html`<mwc-ripple></mwc-ripple>` : ''}
  *     `;
  *   }
  * }
  * ```
  */
-export class RippleHandlers {
-  activate: (ev?: Event) => void;
-  deactivate: () => void;
-  handleFocus: () => void;
-  handleBlur: () => void;
-  handleMouseEnter: () => void;
-  handleMouseLeave: () => void;
+export class RippleHandlers implements RippleAPI {
+  startPress: (ev?: Event) => void;
+  endPress: () => void;
+  startFocus: () => void;
+  endFocus: () => void;
+  startHover: () => void;
+  endHover: () => void;
 
   constructor(
       /** Function that returns a `mwc-ripple` */
-      rippleFn: () => Promise<Ripple|null>) {
-    this.activate = (ev?: Event) => {
+      rippleFn: () => Promise<RippleAPI|null>) {
+    this.startPress = (ev?: Event) => {
       rippleFn().then((r) => {
-        r && r.activate(ev);
+        r && r.startPress(ev);
       });
     };
-    this.deactivate = () => {
+    this.endPress = () => {
       rippleFn().then((r) => {
-        r && r.deactivate();
+        r && r.endPress();
       });
     };
-    this.handleFocus = () => {
+    this.startFocus = () => {
       rippleFn().then((r) => {
-        r && r.handleFocus();
+        r && r.startFocus();
       });
     };
-    this.handleBlur = () => {
+    this.endFocus = () => {
       rippleFn().then((r) => {
-        r && r.handleBlur();
+        r && r.endFocus();
       });
     };
-    this.handleMouseEnter = () => {
+    this.startHover = () => {
       rippleFn().then((r) => {
-        r && r.handleMouseEnter();
+        r && r.startHover();
       });
     };
-    this.handleMouseLeave = () => {
+    this.endHover = () => {
       rippleFn().then((r) => {
-        r && r.handleMouseLeave();
+        r && r.endHover();
       });
     };
   }

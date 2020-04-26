@@ -163,11 +163,17 @@ export abstract class TextFieldBase extends FormElement {
 
   @property({type: Number}) step: number|null = null;
 
+  @property({type: Number}) size: number|null = null;
+
   @property({type: Boolean}) helperPersistent = false;
 
   @property({type: Boolean}) charCounter = false;
 
   @property({type: Boolean}) endAligned = false;
+
+  @property({type: String}) prefix = '';
+
+  @property({type: String}) suffix = '';
 
   // lit-analyzer requires specific string types, but TS does not compile since
   // base class is unspecific "string". It also needs non-null coercion (!)
@@ -244,6 +250,7 @@ export abstract class TextFieldBase extends FormElement {
     const classes = Object.assign({}, {
       'mdc-text-field--disabled': this.disabled,
       'mdc-text-field--no-label': !this.label,
+      'mdc-text-field--filled': !this.outlined,
       'mdc-text-field--outlined': this.outlined,
       'mdc-text-field--fullwidth': this.fullWidth,
       'mdc-text-field--with-leading-icon': this.icon,
@@ -257,7 +264,9 @@ export abstract class TextFieldBase extends FormElement {
       <label class="mdc-text-field ${classMap(classes)}">
         ${ripple}
         ${this.icon ? this.renderIcon(this.icon) : ''}
+        ${this.prefix ? this.renderAffix(this.prefix) : ''}
         ${this.renderInput()}
+        ${this.suffix ? this.renderAffix(this.suffix, true) : ''}
         ${this.iconTrailing ? this.renderIcon(this.iconTrailing, true) : ''}
         ${this.outlined ? this.renderOutlined() : this.renderLabelText()}
       </label>
@@ -306,9 +315,20 @@ export abstract class TextFieldBase extends FormElement {
           min="${ifDefined(this.min === '' ? undefined : this.min as number)}"
           max="${ifDefined(this.max === '' ? undefined : this.max as number)}"
           step="${ifDefined(this.step === null ? undefined : this.step)}"
+          size="${ifDefined(this.size === null ? undefined : this.size)}"
           inputmode="${ifDefined(this.inputMode)}"
           @input="${this.handleInputChange}"
           @blur="${this.onInputBlur}">`;
+  }
+
+  protected renderAffix(content: string, isSuffix = false) {
+    const classes = {
+      'mdc-text-field__affix--prefix': !isSuffix,
+      'mdc-text-field__affix--suffix': isSuffix
+    };
+
+    return html`<span class="mdc-text-field__affix ${classMap(classes)}">
+        ${content}</span>`;
   }
 
   protected renderIcon(icon: string, isTrailingIcon = false) {
@@ -372,9 +392,8 @@ export abstract class TextFieldBase extends FormElement {
 
     return html`
       <div class="mdc-text-field-helper-line ${classMap(rootClasses)}">
-        <div class="mdc-text-field-helper-text ${classMap(classes)}">
-          ${showValidationMessage ? this.validationMessage : this.helper}
-        </div>
+        <div class="mdc-text-field-helper-text ${classMap(classes)}">${
+        showValidationMessage ? this.validationMessage : this.helper}</div>
         ${charCounterTemplate}
       </div>
     `;

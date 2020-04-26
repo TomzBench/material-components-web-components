@@ -151,32 +151,35 @@ npm install @material/mwc-textfield
 
 ### Properties/Attributes
 
-| Name                | Type             | Description
-| ------------------- | ---------------- |------------
-| `value`             | `string`         | The input control's value.
-| `type`              | `TextFieldType*` | A string specifying the type of control to render.
-| `label`             | `string`         | Sets floating label value.
-| `placeholder`       | `string`         | Sets disappearing input placeholder.
-| `icon`              | `string`         | Leading icon to display in input. See [`mwc-icon`](https://github.com/material-components/material-components-web-components/tree/master/packages/icon).
-| `iconTrailing`      | `string`         | Trailing icon to display in input. See [`mwc-icon`](https://github.com/material-components/material-components-web-components/tree/master/packages/icon).
-| `disabled`          | `boolean`        | Whether or not the input should be disabled.
-| `charCounter`       | `boolean`        | **Note: requries `maxLength` to be set.** Display character counter with max length.
-| `outlined`          | `boolean`        | Whether or not to show the material outlined variant.
-| `fullwidth`         | `boolean`        | Whether or not to make the input fullwidth. No longer displays `label`; only `placeholder` and `helper`.
-| `helper`            | `string`         | Helper text to display below the input. Display default only when focused.
-| `helperPersistent`  | `boolean`        | Always show the helper text despite focus.
-| `required`          | `boolean`        | Displays error state if value is empty and input is blurred.
-| `maxLength`         | `number`         | Maximum length to accept input.
-| `validationMessage` | `string`         | Message to show in the error color when the textfield is invalid. (Helper text will not be visible)
-| `pattern`           | `string`         | [`HTMLInputElement.prototype.pattern`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
-| `min`               | `number`\|`string`  | [`HTMLInputElement.prototype.min`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
-| `max`               | `number`\|`string`  | [`HTMLInputElement.prototype.max`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
-| `step`              | `number`\|`null`    | [`HTMLInputElement.prototype.step`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (null will unset attribute)
-| `autoValidate`      | `boolean`           | Reports validity on input rather than only on blur.
-| `validity`          | `ValidityState` (readonly) | The [`ValidityState`](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState) of the textfield.
-| `willValidate`      | `boolean` (readonly)       | [`HTMLInputElement.prototype.willValidate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#Properties)
-| `validityTransform` | `ValidityTransform**`\|`null` | Callback called before each validation check. See the [validation section](#Validation) for more details.
-| `validateOnInitialRender` | `boolean`            | Runs validation check on initial render.
+Name                      | Type                          | Description
+------------------------- | ----------------------------- | -----------
+`value`                   | `string`                      | The input control's value.
+`type`                    | `TextFieldType*`              | A string specifying the type of control to render.
+`label`                   | `string`                      | Sets floating label value.
+`placeholder`             | `string`                      | Sets disappearing input placeholder.
+`prefix`                  | `string`                      | Prefix text to display before the input.
+`suffix`                  | `string`                      | Suffix text to display after the input.
+`icon`                    | `string`                      | Leading icon to display in input. See [`mwc-icon`](https://github.com/material-components/material-components-web-components/tree/master/packages/icon).
+`iconTrailing`            | `string`                      | Trailing icon to display in input. See [`mwc-icon`](https://github.com/material-components/material-components-web-components/tree/master/packages/icon).
+`disabled`                | `boolean`                     | Whether or not the input should be disabled.
+`charCounter`             | `boolean`                     | **Note: requries `maxLength` to be set.** Display character counter with max length.
+`outlined`                | `boolean`                     | Whether or not to show the material outlined variant.
+`fullwidth`               | `boolean`                     | Whether or not to make the input fullwidth. No longer displays `label`; only `placeholder` and `helper`.
+`helper`                  | `string`                      | Helper text to display below the input. Display default only when focused.
+`helperPersistent`        | `boolean`                     | Always show the helper text despite focus.
+`required`                | `boolean`                     | Displays error state if value is empty and input is blurred.
+`maxLength`               | `number`                      | Maximum length to accept input.
+`validationMessage`       | `string`                      | Message to show in the error color when the textfield is invalid. (Helper text will not be visible)
+`pattern`                 | `string`                      | [`HTMLInputElement.prototype.pattern`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
+`min`                     | `number`\|`string`            | [`HTMLInputElement.prototype.min`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
+`max`                     | `number`\|`string`            | [`HTMLInputElement.prototype.max`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (empty string will unset attribute)
+`size`                    | `number`\|`null`              | [`HTMLInputElement.prototype.size`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefsize) (null will unset attribute)
+`step`                    | `number`\|`null`              | [`HTMLInputElement.prototype.step`](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation#Validation-related_attributes) (null will unset attribute)
+`autoValidate`            | `boolean`                     | Reports validity on input rather than only on blur.
+`validity`                | `ValidityState` (readonly)    | The [`ValidityState`](https://developer.mozilla.org/en-US/docs/Web/API/ValidityState) of the textfield.
+`willValidate`            | `boolean` (readonly)          | [`HTMLInputElement.prototype.willValidate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#Properties)
+`validityTransform`       | `ValidityTransform**`\|`null` | Callback called before each validation check. See the [validation section](#Validation) for more details.
+`validateOnInitialRender` | `boolean`                     | Runs validation check on initial render.
 
 \*  `TextFieldType` is exported by `mwc-textfield` and `mwc-textfield-base`
 ```ts
@@ -211,8 +214,9 @@ Inherits CSS Custom properties from:
 | `--mdc-theme-primary`                             | `#6200ee`             | Color when active of the underline ripple, the outline, and the caret.
 | `--mdc-theme-error`                               | `#b00020`             | Color when errored of the underline, the outline, the caret, and the icons.
 | `--mdc-text-field-filled-border-radius`           | `4px 4px 0 0`         | Border radius of the standard / filled textfield's background filling.
-| `--mdc-text-field-idle-line-color`                | `rgba(0, 0, 0, 0.42)` | Color of the filled textfield's  bottom line when idle.
-| `--mdc-text-field-hover-line-color`               | `rgba(0, 0, 0, 0.87)` | Color of the filled textfield's  bottom line when hovering.
+| `--mdc-text-field-idle-line-color`                | `rgba(0, 0, 0, 0.42)` | Color of the filled textfield's bottom line when idle.
+| `--mdc-text-field-hover-line-color`               | `rgba(0, 0, 0, 0.87)` | Color of the filled textfield's bottom line when hovering.
+| `--mdc-text-field-disabled-line-color`            | `rgba(0, 0, 0, 0.06)` | Color of the filled textfield's bottom line when disabled.
 | `--mdc-text-field-outlined-idle-border-color`     | `rgba(0, 0, 0, 0.38)` | Color of the outlined textfield's  outline when idle.
 | `--mdc-text-field-outlined-hover-border-color`    | `rgba(0, 0, 0, 0.87)` | Color of the outlined textfield's outline when hovering.
 | `--mdc-text-field-outlined-disabled-border-color` | `rgba(0, 0, 0, 0.06)` | Color of the outlined textfield's outline when disabled.

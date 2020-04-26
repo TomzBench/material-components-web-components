@@ -213,7 +213,7 @@ Name                      | Type                          | Default            |
 ------------------------- | ----------------------------- | ------------------ | -----------
 `value`                   | `string`                      | `""`               | The select control's value determined by the `value` property of the currently selected list item. Setting value will attempt to select a list-item with the same value. If one does not match, it will set itself to `""` and the `index` to `-1`. Setting `value` before the list item is attached will not select the item.
 `label`                   | `string`                      | `""`               | Sets floating label value. __NOTE:__ The label will not float if the selected item has a falsey value property.
-`naturalWidth`            | `string`                      | `false`            | Sets the dropdown menu's width to `auto`.
+`naturalMenuWidth`        | `string`                      | `false`            | Sets the dropdown menu's width to `auto`.
 `icon`                    | `string`                      | `""`               | Leading icon to display in select. See [`mwc-icon`](https://github.com/material-components/material-components-web-components/tree/master/packages/icon). _Note_: for proper list spacing, each list item must have `graphic="icon"` or `graphic="avatar"` to be set.
 `disabled`                | `boolean`                     | `false`            | Whether or not the select should be disabled.
 `outlined`                | `boolean`                     | `false`            | Whether or not to show the material outlined variant.
@@ -253,24 +253,8 @@ Name                                          | Description
 | ---------- | -------------------- | ----------------- | -------------------- |
 | `opened`   | `mwc-select-surface` | none              | Fired menu opens.    |
 | `closed`   | `mwc-select-surface` | none              | Fired menu closes.   |
-| `action`   | `mwc-list`           | `ActionDetail`*   | Fired when a         |
-:            :                      :                   : selection has been   :
-:            :                      :                   : made via click or    :
-:            :                      :                   : keyboard aciton.     :
-| `selected` | `mwc-list`           | `SelectedDetail`* | Fired when a         |
-:            :                      :                   : selection has been   :
-:            :                      :                   : made. `index` is the :
-:            :                      :                   : selected index (will :
-:            :                      :                   : be of type           :
-:            :                      :                   : `Set<number>` if     :
-:            :                      :                   : multi and `number`   :
-:            :                      :                   : if single), and      :
-:            :                      :                   : `diff` (of type      :
-:            :                      :                   : `IndexDiff`**)       :
-:            :                      :                   : represents the diff  :
-:            :                      :                   : of added and removed :
-:            :                      :                   : indices from         :
-:            :                      :                   : previous selection.  :
+| `action`   | `mwc-list`           | `ActionDetail`*   | Fired when a selection has been made via click or keyboard action. |
+| `selected` | `mwc-list`           | `SelectedDetail`* | Fired when a selection has been made. `index` is the selected index (will  be of type `Set<number>` if multi and `number` if single), and `diff` (of type `IndexDiff`**) represents the diff of added and removed indices from previous selection. |
 
 \* See
 [`mwc-list`'s Events section](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-2)

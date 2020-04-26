@@ -16,26 +16,19 @@ limitations under the License.
 */
 
 import {addHasRemoveClass, BaseElement, CustomEventListener, EventType, SpecificEventListener} from './base-element.js';
+import {HTMLElementWithRipple, RippleInterface} from './utils.js';
 
 export {
   addHasRemoveClass,
   BaseElement,
   CustomEventListener,
   EventType,
-  SpecificEventListener
+  HTMLElementWithRipple,
+  RippleInterface,
+  SpecificEventListener,
 };
 
-export interface HTMLElementWithRipple extends HTMLElement {
-  ripple?: RippleInterface;
-}
-
-export interface RippleInterface {
-  activate: (e?: Event) => void;
-  deactivate: () => void;
-  handleFocus: () => void;
-  handleBlur: () => void;
-}
-
+/** @soyCompatible */
 export abstract class FormElement extends BaseElement {
   /**
    * Form-capable element in the component ShadowRoot.

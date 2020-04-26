@@ -25,8 +25,6 @@ import {MDCListAdapter} from './mwc-list-adapter.js';
 import MDCListFoundation, {ActionDetail, isIndexSet, SelectedDetail} from './mwc-list-foundation.js';
 import {MWCListIndex} from './mwc-list-foundation.js';
 import {ListItemBase, RequestSelectedDetail} from './mwc-list-item-base.js';
-import {classMapFromString} from '@material/mwc-base/base-element.js';
-import {classMap} from 'lit-html/directives/class-map.js';
 
 export {createSetFromIndex, isEventMulti, isIndexSet, MWCListIndex} from './mwc-list-foundation.js';
 
@@ -48,8 +46,6 @@ export abstract class ListBase extends BaseElement {
   @query('.mdc-list') protected mdcRoot!: HTMLElement;
 
   @query('slot') protected slotElement!: HTMLSlotElement|null;
-
-  @property({type: String}) classes = '';
 
   @property({type: Boolean})
   @observer(function(this: ListBase, value: boolean) {
@@ -89,6 +85,8 @@ export abstract class ListBase extends BaseElement {
   itemRoles: string|null = null;
 
   @property({type: String}) innerRole: string|null = null;
+
+  @property({type: String}) innerAriaLabel: string|null = null;
 
   @property({type: Boolean}) rootTabbable = false;
 
@@ -196,14 +194,16 @@ export abstract class ListBase extends BaseElement {
 
   render() {
     const role = this.innerRole === null ? undefined : this.innerRole;
+    const ariaLabel =
+        this.innerAriaLabel === null ? undefined : this.innerAriaLabel;
     const tabindex = this.rootTabbable ? '0' : '-1';
-    const classes = classMapFromString(this.classes);
     return html`
       <!-- @ts-ignore -->
       <ul
           tabindex=${tabindex}
           role="${ifDefined(role)}"
-          class="mdc-list ${classMap(classes)}"
+          aria-label="${ifDefined(ariaLabel)}"
+          class="mdc-list"
           @keydown=${this.onKeydown}
           @focusin=${this.onFocusIn}
           @focusout=${this.onFocusOut}

@@ -19,6 +19,7 @@ import {html, LitElement, property} from 'lit-element';
 import {classMapFromString} from '@material/mwc-base/base-element.js';
 import {classMap} from 'lit-html/directives/class-map.js';
 
+/** @soyCompatible */
 export class IconButtonBase extends LitElement {
   @property({type: String}) classes = '';
 
@@ -28,6 +29,7 @@ export class IconButtonBase extends LitElement {
 
   @property({type: String}) label = '';
 
+  /** @soyCompatible */
   protected render() {
     const classes = classMapFromString(this.classes);
     return html`<button

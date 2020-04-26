@@ -8,6 +8,51 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Added --mdc-menu-z-index to menu-surface
+- Added surface/on-surface theme properties for mwc-switch
+- Added overrides for ripple focus and hover opacities
+  - `--mdc-ripple-focus-opacity` and `--mdc-ripple-hover-opacity` respectively
+- Added `spaceBetween` to mwc-formfield
+- Added `activated` and `selected` states for ripple
+- Added documentation for ripple
+- Prefix and suffix to mwc-textfield
+- `mwc-formfield` now has a nowrap property
+- mdc-button now has --mdc-shape-small for border radii
+- Added `size` property to `mwc-textfield`
+- `mwc-fab` now has a slot of icons
+- Added `fullwidth` property to `mwc-select`.
+
+### Changed
+
+- Refactor `mwc-checkbox`
+  - Remove usage of `MDCCheckboxFoundation`
+  - Replace `ripple-directive` with lazy `mwc-ripple`
+- Refactor `mwc-button`
+  - Replace `ripple-directive` with lazy `mwc-ripple`
+- Refactor `mwc-ripple`
+  - Normalized API to `start${state}` `end${state}` naming
+- **BREAKING:VISUAL:** mwc-list-item now internally uses mwc-ripple instead of styling ripple on host
+- `mwc-menu`'s `quick` variant now opens synchronously
+- Convert to [Sass modules](https://sass-lang.com/documentation/at-rules/use)
+- `mwc-select`'s `naturalWidth` property renamed to `naturalMenuWidth` for clarity.
+
+### Fixed
+
+- Fix property renaming issues with Closure Compiler
+  - Use `RippleAPI` interface between `RippleHandlers` and `mwc-ripple`
+  - Use `RippleInterface` interface for `ripple-directive`
+- Fix regression in textfield line color custom properties
+- Fix infinite loop bug in `mwc-tab-bar` when `activeIndex` is set in first render
+- Fixed bug in `mwc-slider` where initializing min and max over `100` would not set correct bounds on UI.
+- Fixed `"` showing up in mwc-button when the ripple activates
+
+## [v0.14.1] - 2020-03-23
+
+### Added
+
+- `innerAriaLabel` to `mwc-list` to set `aria-label`.
+- `--mdc-text-field-disabled-line-color` added
+
 ### Changed
 
 - Update `lit-element` dependency to `2.3.0` for all components.

@@ -117,8 +117,6 @@ export abstract class SelectBase extends FormElement {
 
   @query('.mdc-menu') protected menuElement!: Menu|null;
 
-  @query('.mdc-select__selected-text')
-  protected selectedTextElement!: HTMLDivElement|null;
 
   @query('.mdc-select__anchor') protected anchorElement!: HTMLDivElement|null;
 
@@ -168,7 +166,9 @@ export abstract class SelectBase extends FormElement {
 
   @property({type: Boolean}) required = false;
 
-  @property({type: Boolean}) naturalWidth = false;
+  @property({type: Boolean}) fullwidth = false;
+
+  @property({type: Boolean}) naturalMenuWidth = false;
 
   @property({type: Boolean}) protected isUiValid = true;
 
@@ -241,6 +241,7 @@ export abstract class SelectBase extends FormElement {
       'mdc-select--with-leading-icon': !!this.icon,
       'mdc-select--required': this.required,
       'mdc-select--invalid': !this.isUiValid,
+      'mdc-select--fullwidth': this.fullwidth,
     };
 
     const describedby = this.shouldRenderHelperText ? 'helper-text' : undefined;
@@ -252,8 +253,25 @@ export abstract class SelectBase extends FormElement {
             .value=${this.value}
             hidden
             ?required=${this.required}>
-        ${this.icon ? this.renderIcon(this.icon) : ''}
-        <div class="mdc-select__anchor" @click=${this.onClick}>
+        <!-- @ts-ignore -->
+        <div class="mdc-select__anchor"
+              role="button"
+              aria-invalid=${!this.isUiValid}
+              aria-haspopup="listbox"
+              aria-labelledby="label"
+              aria-required=${this.required}
+              aria-describedby=${ifDefined(describedby)}
+              @click=${this.onClick}
+              @focus=${this.onFocus}
+              @blur=${this.onBlur}
+              @keydown=${this.onKeydown}>
+          ${this.icon ? this.renderIcon(this.icon) : ''}
+          <input
+            type="text"
+            disabled
+            readonly
+            class="mdc-select__selected-text"
+            value="${this.selectedText}">
           <i class="mdc-select__dropdown-icon">
             <svg
                 width="10px"
@@ -269,20 +287,6 @@ export abstract class SelectBase extends FormElement {
               </polygon>
             </svg>
           </i>
-          <!-- @ts-ignore -->
-          <div
-              class="mdc-select__selected-text"
-              role="button"
-              aria-invalid=${!this.isUiValid}
-              aria-haspopup="listbox"
-              aria-labelledby="label"
-              aria-required=${this.required}
-              aria-describedby=${ifDefined(describedby)}
-              @focus=${this.onFocus}
-              @blur=${this.onBlur}
-              @keydown=${this.onKeydown}>
-            ${this.selectedText}
-          </div>
           ${outlinedOrUnderlined}
         </div>
         ${this.renderHelperText()}
@@ -291,7 +295,7 @@ export abstract class SelectBase extends FormElement {
             wrapFocus
             class="mdc-select__menu mdc-menu mdc-menu-surface"
             activatable
-            .fullwidth=${!this.naturalWidth}
+            .fullwidth=${!this.naturalMenuWidth}
             .open=${this.menuOpen}
             .anchor=${this.anchorElement}
             @selected=${this.onSelected}
@@ -312,9 +316,10 @@ export abstract class SelectBase extends FormElement {
     };
 
     return html`
-        <p class="mdc-select-helper-text ${classMap(classes)}" id="helper-text">
-          ${showValidationMessage ? this.validationMessage : this.helper}
-        </p>`;
+        <p
+          class="mdc-select-helper-text ${classMap(classes)}"
+          id="helper-text">${
+        showValidationMessage ? this.validationMessage : this.helper}</p>`;
   }
 
   protected renderOutlined() {
@@ -427,35 +432,35 @@ export abstract class SelectBase extends FormElement {
         this.dispatchEvent(ev);
       },
       setSelectedText: (value) => this.selectedText = value,
-      isSelectedTextFocused: () => {
-        const selectedTextElement = this.selectedTextElement;
+      isSelectAnchorFocused: () => {
+        const selectAnchorElement = this.anchorElement;
 
-        if (!selectedTextElement) {
+        if (!selectAnchorElement) {
           return false;
         }
 
         const rootNode =
-            selectedTextElement.getRootNode() as ShadowRoot | Document;
+            selectAnchorElement.getRootNode() as ShadowRoot | Document;
 
-        return rootNode.activeElement === selectedTextElement;
+        return rootNode.activeElement === selectAnchorElement;
       },
-      getSelectedTextAttr: (attr) => {
-        const selectedTextElement = this.selectedTextElement;
+      getSelectAnchorAttr: (attr) => {
+        const selectAnchorElement = this.anchorElement;
 
-        if (!selectedTextElement) {
+        if (!selectAnchorElement) {
           return null;
         }
 
-        return selectedTextElement.getAttribute(attr);
+        return selectAnchorElement.getAttribute(attr);
       },
-      setSelectedTextAttr: (attr, value) => {
-        const selectedTextElement = this.selectedTextElement;
+      setSelectAnchorAttr: (attr, value) => {
+        const selectAnchorElement = this.anchorElement;
 
-        if (!selectedTextElement) {
+        if (!selectAnchorElement) {
           return;
         }
 
-        return selectedTextElement.setAttribute(attr, value);
+        selectAnchorElement.setAttribute(attr, value);
       },
       openMenu: () => {
         this.menuOpen = true;
@@ -649,21 +654,21 @@ export abstract class SelectBase extends FormElement {
 
   focus() {
     const focusEvt = new CustomEvent('focus');
-    const selectedTextElement = this.selectedTextElement;
+    const selectAnchorElement = this.anchorElement;
 
-    if (selectedTextElement) {
-      selectedTextElement.dispatchEvent(focusEvt);
-      selectedTextElement.focus();
+    if (selectAnchorElement) {
+      selectAnchorElement.dispatchEvent(focusEvt);
+      selectAnchorElement.focus();
     }
   }
 
   blur() {
     const focusEvt = new CustomEvent('blur');
-    const selectedTextElement = this.selectedTextElement;
+    const selectAnchorElement = this.anchorElement;
 
-    if (selectedTextElement) {
-      selectedTextElement.dispatchEvent(focusEvt);
-      selectedTextElement.blur();
+    if (selectAnchorElement) {
+      selectAnchorElement.dispatchEvent(focusEvt);
+      selectAnchorElement.blur();
     }
   }
 

@@ -17,12 +17,13 @@ limitations under the License.
 import {BaseElement} from '@material/mwc-base/base-element.js';
 import {MDCRippleAdapter} from '@material/ripple/adapter.js';
 import MDCRippleFoundation from '@material/ripple/foundation.js';
-import {html, property, query} from 'lit-element';
+import {html, internalProperty, property, query} from 'lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
-import {styleMap} from 'lit-html/directives/style-map';
+import {styleMap} from 'lit-html/directives/style-map.js';
+import {RippleAPI} from './ripple-handlers.js';
 
 /** @soyCompatible */
-export class RippleBase extends BaseElement {
+export class RippleBase extends BaseElement implements RippleAPI {
   @query('.mdc-ripple-surface') mdcRoot!: HTMLElement;
 
   @property({type: Boolean}) primary = false;
@@ -33,39 +34,43 @@ export class RippleBase extends BaseElement {
 
   @property({type: Boolean}) disabled = false;
 
-  @property({type: Boolean}) light = false;
+  @property({type: Boolean}) activated = false;
 
-  @property({attribute: false}) private hovering = false;
+  @property({type: Boolean}) selected = false;
 
-  @property({attribute: false}) private bgFocused = false;
+  @internalProperty() private hovering = false;
 
-  @property({attribute: false}) private fgActivation = false;
+  @internalProperty() private bgFocused = false;
 
-  @property({attribute: false}) private fgDeactivation = false;
+  @internalProperty() private fgActivation = false;
 
-  @property({attribute: false}) private fgScale = '';
+  @internalProperty() private fgDeactivation = false;
 
-  @property({attribute: false}) private fgSize = '';
+  @internalProperty() private fgScale = '';
 
-  @property({attribute: false}) private translateStart = '';
+  @internalProperty() private fgSize = '';
 
-  @property({attribute: false}) private translateEnd = '';
+  @internalProperty() private translateStart = '';
 
-  @property({attribute: false}) private leftPos = '';
+  @internalProperty() private translateEnd = '';
 
-  @property({attribute: false}) private topPos = '';
+  @internalProperty() private leftPos = '';
+
+  @internalProperty() private topPos = '';
 
   protected mdcFoundationClass = MDCRippleFoundation;
 
   protected mdcFoundation!: MDCRippleFoundation;
 
+  get isActive() {
+    return (this.parentElement || this).matches(':active');
+  }
+
   createAdapter(): MDCRippleAdapter {
     return {
       browserSupportsCssVars: () => true,
       isUnbounded: () => this.unbounded,
-      isSurfaceActive: () => {
-        return (this.parentElement || this).matches(':active');
-      },
+      isSurfaceActive: () => this.isActive,
       isSurfaceDisabled: () => this.disabled,
       addClass: (className: string) => {
         switch (className) {
@@ -135,35 +140,35 @@ export class RippleBase extends BaseElement {
     };
   }
 
-  activate(ev?: Event) {
+  startPress(ev?: Event) {
     this.waitForFoundation(() => {
       this.mdcFoundation.activate(ev);
     });
   }
 
-  deactivate() {
+  endPress() {
     this.waitForFoundation(() => {
       this.mdcFoundation.deactivate();
     });
   }
 
-  handleFocus() {
+  startFocus() {
     this.waitForFoundation(() => {
       this.mdcFoundation.handleFocus();
     });
   }
 
-  handleBlur() {
+  endFocus() {
     this.waitForFoundation(() => {
       this.mdcFoundation.handleBlur();
     });
   }
 
-  handleMouseEnter() {
+  startHover() {
     this.hovering = true;
   }
 
-  handleMouseLeave() {
+  endHover() {
     this.hovering = false;
   }
 
@@ -190,7 +195,8 @@ export class RippleBase extends BaseElement {
       'primary': this.primary,
       'accent': this.accent,
       'disabled': this.disabled,
-      'light': this.light,
+      'activated': this.activated,
+      'selected': this.selected,
     };
     return html`
         <div class="mdc-ripple-surface mdc-ripple-upgraded ${classMap(classes)}"
@@ -201,8 +207,6 @@ export class RippleBase extends BaseElement {
       '--mdc-ripple-fg-translate-start': this.translateStart,
       '--mdc-ripple-left': this.leftPos,
       '--mdc-ripple-top': this.topPos,
-    })}"
-          ?data-mdc-ripple-is-unbounded="${this.unbounded}">
-        </div>`;
+    })}"></div>`;
   }
 }
