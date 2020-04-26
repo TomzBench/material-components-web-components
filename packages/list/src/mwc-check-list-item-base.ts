@@ -28,7 +28,7 @@ export class CheckListItemBase extends ListItemBase {
   @query('slot') protected slotElement!: HTMLSlotElement|null;
   @query('mwc-checkbox') protected checkboxElement!: Checkbox;
 
-  @property({type: String}) classes = '';
+  @property({type: String}) class = '';
   @property({type: Boolean}) left = false;
   @property({type: String, reflect: true}) graphic: GraphicType = 'control';
 
@@ -36,7 +36,7 @@ export class CheckListItemBase extends ListItemBase {
     const checkboxClasses = Object.assign({}, {
       'mdc-list-item__graphic': this.left,
       'mdc-list-item__meta': !this.left,
-    }, classMapFromString(this.classes));
+    }, classMapFromString(this.class));
 
     const text = this.renderText();
     const graphic = this.graphic && this.graphic !== 'control' && !this.left ?

@@ -54,7 +54,7 @@ export abstract class MenuBase extends BaseElement {
 
   @query('slot') slotElement!: HTMLSlotElement|null;
 
-  @property({type: String}) classes = '';
+  @property({type: String}) class = '';
 
   @property({type: Object}) anchor: HTMLElement|null = null;
 
@@ -149,7 +149,7 @@ export abstract class MenuBase extends BaseElement {
           .fixed=${this.fixed}
           .fullwidth=${this.fullwidth}
           class="${classMap(
-            classMapFromString(this.classes)
+            classMapFromString(this.class)
           )} mdc-menu mdc-menu-surface"
           @closed=${this.onClosed}
           @opened=${this.onOpened}

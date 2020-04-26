@@ -21,7 +21,7 @@ import {classMap} from 'lit-html/directives/class-map.js';
 
 /** @soyCompatible */
 export class IconButtonBase extends LitElement {
-  @property({type: String}) classes = '';
+  @property({type: String}) class = '';
 
   @property({type: Boolean, reflect: true}) disabled = false;
 
@@ -31,7 +31,7 @@ export class IconButtonBase extends LitElement {
 
   /** @soyCompatible */
   protected render() {
-    const classes = classMapFromString(this.classes);
+    const classes = classMapFromString(this.class);
     return html`<button
     .ripple="${ripple()}"
     class="${classMap(classes)} mdc-icon-button"

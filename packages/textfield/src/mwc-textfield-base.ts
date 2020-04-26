@@ -123,7 +123,7 @@ export abstract class TextFieldBase extends FormElement {
   @query('.mdc-text-field-character-counter')
   protected charCounterElement!: CharacterCounter;
 
-  @property({type: String}) classes = '';
+  @property({type: String}) class = '';
 
   @property({type: String}) value = '';
 
@@ -256,7 +256,7 @@ export abstract class TextFieldBase extends FormElement {
       'mdc-text-field--with-leading-icon': this.icon,
       'mdc-text-field--with-trailing-icon': this.iconTrailing,
       'mdc-text-field--end-aligned': this.endAligned,
-    }, classMapFromString(this.classes));
+    }, classMapFromString(this.class));
 
     const ripple =
         !this.outlined ? html`<div class="mdc-text-field__ripple"></div>` : '';

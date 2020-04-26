@@ -31,7 +31,7 @@ export class TopAppBarBase extends TopAppBarBaseBase {
 
   @property({type: Boolean, reflect: true}) dense = false;
 
-  @property({type: String, reflect: true}) classes = '';
+  @property({type: String, reflect: true}) class = '';
 
   protected handleResize = () => {
     this.mdcFoundation.handleWindowResize();
@@ -42,7 +42,7 @@ export class TopAppBarBase extends TopAppBarBaseBase {
       'mdc-top-app-bar--dense': this.dense,
       'mdc-top-app-bar--prominent': this.prominent,
       'center-title': this.centerTitle
-    }, classMapFromString(this.classes));
+    }, classMapFromString(this.class));
   }
 
   protected contentClasses() {

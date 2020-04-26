@@ -31,7 +31,7 @@ export class IconButtonToggleBase extends BaseElement {
 
   @query('.mdc-icon-button') protected mdcRoot!: HTMLElement;
 
-  @property({type: String}) classes = '';
+  @property({type: String}) class = '';
 
   @property({type: String}) label = '';
 
@@ -73,7 +73,7 @@ export class IconButtonToggleBase extends BaseElement {
   }
 
   protected render() {
-    const classes = classMapFromString(this.classes);
+    const classes = classMapFromString(this.class);
     return html`
       <button
         .ripple="${ripple()}"
