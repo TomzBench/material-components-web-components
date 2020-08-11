@@ -7,6 +7,9 @@ be used to turn an option on or off.
 
 [Material Design Guidelines: Checkboxes](https://material.io/components/selection-controls/#checkboxes)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/checkbox/)
+
+
 ## Installation
 
 ```sh
@@ -130,11 +133,12 @@ to associate an interactive label with the checkbox.
 ### Properties/Attributes
 
 Name            | Type      | Default | Description
---------------- | --------- | ------- | -----------
-`checked`       | `boolean` | `false` | Whether the checkbox is checked.
-`indeterminate` | `boolean` | `false` | When a checkbox is the parent of a set of child checkboxes, the *indeterminate* state is used on the parent to indicate that some but not all of its children are checked.
-`disabled`      | `boolean` | `false` | When `true`, the checkbox cannot be interacted with, and renders in muted colors.
-`value`         | `string`  | `''`    | The value that will be included if the checkbox is submitted in a form.
+-------------------- | --------- | ------- | -----------
+`checked`            | `boolean` | `false` | Whether the checkbox is checked.
+`indeterminate`      | `boolean` | `false` | When a checkbox is the parent of a set of child checkboxes, the *indeterminate* state is used on the parent to indicate that some but not all of its children are checked.
+`disabled`           | `boolean` | `false` | When `true`, the checkbox cannot be interacted with, and renders in muted colors.
+`value`              | `string`  | `''`    | The value that will be included if the checkbox is submitted in a form.
+`reducedTouchTarget` | `boolean` | `false` | When `true`, the checkbox remove padding for touchscreens and increase density. Note, the checkbox will no longer meet accessibility guidelines for touch.
 
 
 ### Methods

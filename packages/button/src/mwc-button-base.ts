@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import '@material/mwc-icon';
+import '@material/mwc-icon/mwc-icon';
 import '@material/mwc-ripple/mwc-ripple.js';
 
 import {Ripple} from '@material/mwc-ripple/mwc-ripple.js';
@@ -101,7 +101,6 @@ export class ButtonBase extends LitElement {
           @focus="${this.handleRippleFocus}"
           @blur="${this.handleRippleBlur}"
           @mousedown="${this.handleRippleActivate}"
-          @mouseup="${this.handleRippleDeactivate}"
           @mouseenter="${this.handleRippleMouseEnter}"
           @mouseleave="${this.handleRippleMouseLeave}"
           @touchstart="${this.handleRippleActivate}"
@@ -133,6 +132,13 @@ export class ButtonBase extends LitElement {
 
   @eventOptions({passive: true})
   private handleRippleActivate(evt?: Event) {
+    const onUp = () => {
+      window.removeEventListener('mouseup', onUp);
+
+      this.handleRippleDeactivate();
+    };
+
+    window.addEventListener('mouseup', onUp);
     this.rippleHandlers.startPress(evt);
   }
 

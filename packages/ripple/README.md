@@ -7,6 +7,8 @@ Ripple provides the JavaScript and CSS required to provide components (or any el
 
 [Material Design Guidelines: States](https://material.io/design/interaction/states.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/ripple/)
+
 ## Installation
 
 ```sh
@@ -89,3 +91,4 @@ Name | Type | Default | Description
 | `--mdc-ripple-focus-opacity` | `0.12` | Opacity of the ripple when focused.
 | `--mdc-ripple-selected-opacity` | `0.08` | Opacity of the ripple when the host component is "selected". This opacity is added to `press`, `hover`, and `focus` states.
 | `--mdc-ripple-activated-opacity` | `0.12` | Opacity of the ripple when the host component is "activated". This opacity is added to `press`, `hover`, and `focus` states.
+| `--m-ripple-z-index` | `0` | Z-index of the ripple.

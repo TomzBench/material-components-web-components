@@ -12,6 +12,8 @@ A floating action button (FAB) represents the primary action of a screen.
 
 [Material Design Guidelines: Floating Action Button](https://material.io/design/components/buttons-floating-action-button.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/fab/)
+
 ## Installation
 
 ```sh
@@ -106,6 +108,7 @@ mwc-fab {
 | `icon`          | `string`  | The icon to display.
 | `label`         | `string`  | The label to display when using the `extended` layout, and the `aria-label` attribute in all layouts.
 | `mini`          | `boolean` | Modifies the FAB to be a smaller size, for use on smaller screens. Defaults to `false`.
+| `reducedTouchTarget` | `boolean` | Sets the minimum touch target of the default-sized mini fab to recommended 48x48px.
 | `extended`      | `boolean` | Enable the *extended* layout which includes a text label. Defaults to `false`.
 | `showIconAtEnd` | `boolean` | When in the *extended* layout, position the icon after the label, instead of before. Defaults to `false`.
 
@@ -117,14 +120,12 @@ mwc-fab {
 
 ### CSS Custom Properties
 
-| Name                       | Default                                | Description
-| -------------------------- | -------------------------------------- |------------
-| `--mdc-icon-font`          | [`Material Icons`](https://google.github.io/material-design-icons/) | Font to use for the icon.
-| `--mdc-theme-on-secondary` | ![](images/color_ffffff.png) `#ffffff` | Foreground color of the label and icon.
-| `--mdc-theme-secondary`    | ![](images/color_018786.png) `#018786` | Background color of the FAB.
-| `--mdc-fab-box-shadow`        | mdc elevation 6  | Sets the box shadow of the fab.
-| `--mdc-fab-box-shadow-hover`  | mdc elevation 8  | Sets the box shadow of the fab when focused or hovered.
-| `--mdc-fab-box-shadow-active` | mdc elevation 12 | Sets the box shadow of the fab when active.
+Name                       | Default                                                             | Description
+-------------------------- | ------------------------------------------------------------------- | -----------
+`--mdc-icon-font`          | [`Material Icons`](https://google.github.io/material-design-icons/) | Font to use for the icon.
+`--mdc-theme-on-secondary` | ![](images/color_ffffff.png) `#ffffff`                          | Foreground color of the label and icon.
+`--mdc-theme-secondary`    | ![](images/color_018786.png) `#018786`                          | Background color of the FAB.
+`--mdc-fab-box-shadow`     | mdc elevation 6, 8, 12                                              | Sets the box shadow of the fab. Elevation 6 when idle, 8 when focused or hovered, and 12 when active.
 
 #### Elevation values
 

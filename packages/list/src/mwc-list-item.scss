@@ -37,7 +37,12 @@ $dense-item-primary-text-baseline-height: 24px;
   width: $width;
   height: $height;
 
+  &.multi {
+    width: auto;
+  }
+
   ::slotted(*) {
+    width: $width;
     line-height: $height;
   }
 
@@ -50,6 +55,7 @@ $dense-item-primary-text-baseline-height: 24px;
 :host {
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 
   $height: density.prop-value(
     $density-config: list.$single-line-density-config,
@@ -99,7 +105,9 @@ $dense-item-primary-text-baseline-height: 24px;
       varname: --mdc-ripple-activated-opacity,
       fallback: map.get(ripple.$dark-ink-opacities, activated)
     ));
-    background-color: var(--mdc-theme-primary, #{theme.prop-value(primary)});
+    background-color: theme.prop-value(primary);
+    /** @alternate */
+    background-color: var(--mdc-ripple-color, var(--mdc-theme-primary, #{theme.prop-value(primary)}));
   }
 }
 
@@ -125,7 +133,6 @@ $dense-item-primary-text-baseline-height: 24px;
     text-align: center;
   }
 }
-// stylelint-enable plugin/selector-bem-pattern
 
 .mdc-list-item__meta {
   @include graphic-size_(var(--mdc-list-item-meta-size, 24px));
@@ -269,6 +276,7 @@ $dense-item-primary-text-baseline-height: 24px;
   .mdc-list-item__graphic {
     @include featuretargeting.targets($feat-structure) {
       @include graphic-size_(var(--mdc-list-item-graphic-size, 40px));
+
       ::slotted(*) {
         border-radius: 50%;
       }

@@ -9,6 +9,8 @@ Menus display a list of choices on temporary surfaces.
 
 [Material Design Guidelines: menus](https://material.io/design/components/menus.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/menu/)
+
 ## Installation
 
 ```sh
@@ -233,31 +235,34 @@ Name                  | Type                              | Default       | Desc
 `open`                | `boolean`                         | `false`       | Whether the menu should open and display.
 `anchor`              | `HTMLElement\|null`               | `null`        | Determines from which element the floating menu should calculate sizing and position offsets. In the default case, both `mwc-menu` and the anchor should share a parent with `position:relative`. Changing anchor typically requires `absolute` or `fixed`.
 `corner`              | `Corner`*                         | `"TOP_START"` | Corner of the anchor from which the menu should position itself.
+`menuCorner`          | `MenuCorner`\*\*                  | `"START"`     | Horizontal corner of the menu from which the menu should position itself. **NOTE:** Only horizontal corners are supported.
 `quick`               | `boolean`                         | `false`       | Whether to skip the opening animation.
 `absolute`            | `boolean`                         | `false`       | Makes the menu's position `absolute` which will be relative to whichever ancestor has `position:relative`. Setting `x` and `y` will modify the menu's `left` and `top`. Setting `anchor` will attempt to position the menu to the `anchor`.
 `fixed`               | `boolean`                         | `false`       | Makes the menu's position `fixed` which will be relative to the window. Setting `x` and `y` will modify the menu's `left` and `top`. Setting `anchor` will attempt to position the menu to the `anchor`'s immediate position before opening.
 `x`                   | `number\|null`                    | `null`        | Sets horizontal position when `absolute` or `fixed`. When given an `anchor`, sets horizontal position relative to `anchor` at given `corner`. Requires `y` not to be null.
 `y`                   | `number\|null`                    | `null`        | Sets vertical position when `absolute` or `fixed`. When given an `anchor`, sets vertical position relative to `anchor` at given `corner`. Requires `x` not to be null.
 `forceGroupSelection` | `boolean`                         | `false`       | Forces a menu group to have a selected item by preventing deselection of menu items in menu groups via user interaction.
-`defaultFocus`        | `DefaultFocusState`**             | `"LIST_ROOT"` | Item to focus upon menu open.
+`defaultFocus`        | `DefaultFocusState`\*\*\*         | `"LIST_ROOT"` | Item to focus upon menu open.
 `fullwidth`           | `boolean`                         | `false`       | Sets surface width to 100%.
 `wrapFocus`           | `boolean`                         | `false`       | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `wrapFocus` property.
 `innerRole`           | `"menu"                           | "listbox"`    | `"menu"`
 `multi`               | `boolean`                         | `false`       | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `multi` property.
 `activatable`         | `boolean`                         | `false`       | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `activatable` property.
 `items`               | `ListItemBase[]` (readonly)       | `[]`          | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `items` property.
-`index`               | `MWCListIndex` (readonly)\*\*\*   | `-1`          | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `index` property.
-`selected`            | `SelectedType` (readonly)\*\*\*\* | `null`        | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `selected` property.
+`index`               | `MWCListIndex` (readonly)\*\*\*\*   | `-1`          | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `index` property.
+`selected`            | `SelectedType` (readonly)\*\*\*\*\* | `null`        | Proxies to [`mwc-list`'s](https://github.com/material-components/material-components-web-components/tree/master/packages/list#mwc-list-1) `selected` property.
 
 \* `Corner` is equivalent to type
 `"TOP_LEFT"|"TOP_RIGHT"|"BOTTOM_LEFT"|"BOTTOM_RIGHT"|"TOP_START"|"TOP_END" |"BOTTOM_START"|"BOTTOM_END"`
 
-\** `DefaultFocusState` is equivalent to type
+\*\* `Corner` is equivalent to type `"START"|"END"`
+
+\*\*\* `DefaultFocusState` is equivalent to type
 `"NONE"|"LIST_ROOT"|"FIRST_ITEM"|"LAST_ITEM"`
 
-\*** `MWCListIndex` is equivalent to type `number|Set<number>`.
+\*\*\*\* `MWCListIndex` is equivalent to type `number|Set<number>`.
 
-\**** `SelectedType` is equivaalent to type `ListItemBase|ListItemBase[]|null`.
+\*\*\*\*\* `SelectedType` is equivaalent to type `ListItemBase|ListItemBase[]|null`.
 `ListItemBase` is the base class of `mwc-list-item` of which both
 `mwc-check-list-item` and `mwc-radio-list-item` also inherit from.
 
@@ -268,6 +273,8 @@ Name                  | Type                              | Default       | Desc
 | `show() => void`  | Sets `open` to false.
 | `close() => void` | Sets `open` to true.
 | `select(index: MWCMenuIndex) => void` | Selects the elements at the given index / indices.
+| `getFocusedItemIndex() => number` | Returns the index of the currently-focused item. `-1` if none are focused.
+| `focusItemAtIndex(index) => void` | Focuses the item at the given index and manages tabindex on all other items.
 | `layout(updateItems = true) => void` | Resets tabindex on all items and will update `items` model if provided true. It may be required to call layout if selectability of an element is dynamically changed. e.g. `[mwc-list-item]` attribute is removed from a list item or `noninteractive` is dynamically set on a list item.
 
 ### Events
@@ -293,6 +300,7 @@ propagate through `mwc-menu`.
 | `--mdc-menu-item-height` | `48px`  | Height of single-line list-items in the menu.
 | `--mdc-menu-min-width`   | `auto`  | Menu min-width.
 | `--mdc-menu-max-width`   | `auto`  | Menu max-width.
+| `--mdc-menu-max-height`  | `calc(100vh - 32px)` and content height | Menu max height.
 | `--mdc-menu-z-index`     | `8`     | Z-index of the popup menu surface.
 | `--mdc-theme-surface`    | ![](images/color_fff.png) `#fff` | Color of the menu surface.
 

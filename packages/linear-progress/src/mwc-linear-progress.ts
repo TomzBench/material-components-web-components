@@ -26,6 +26,7 @@ declare global {
   }
 }
 
+/** @soyCompatible */
 @customElement('mwc-linear-progress')
 export class LinearProgress extends LinearProgressBase {
   static styles = style;

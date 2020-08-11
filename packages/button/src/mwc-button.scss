@@ -15,13 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-@use '@material/mwc-base/src/elevation';
 @use '@material/button';
+@use '@material/elevation';
 @use '@material/feature-targeting' as feature;
 @use '@material/theme';
 
 @include button.without-ripple();
-@include button.theme-baseline();
 
 .trailing-icon,
 .leading-icon, {
@@ -96,8 +95,6 @@ limitations under the License.
   overflow: hidden;
 
   @include button.horizontal-padding(var(--mdc-button-horizontal-padding, #{button.$horizontal-padding}));
-
-  border-radius: var(--mdc-shape-small, 4px);
 
   &.mdc-button--raised,
   &.mdc-button--unelevated {

@@ -8,6 +8,146 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- `menu`
+  - `--mdc-menu-max-height` to set max height on menu
+- `fab`
+  - `reducedTouchTarget` reduces the touch target on mini fab
+
+### Changed
+
+- `fab`
+  - **BREAKING:VISUAL** default touch target increased on mini fab by 8px.
+
+## [v0.18.0] - 2020-08-03
+
+### Changed
+
+- `fab`
+  - **BREAKING** removed `--mdc-fab-box-shadow-hover`; use `--mdc-fab-box-shadow`
+  - **BREAKING** removed `--mdc-fab-box-shadow-active`; use `--mdc-fab-box-shadow`
+  - Ripple now uses and exposes `mwc-ripple`'s CSS custom properties API
+- `icon-button`
+  - **BREAKING** now uses lazy `mwc-ripple` in its implementation
+- `icon-button-toggle`
+  - **BREAKING** now uses lazy `mwc-ripple` in its implementation
+- `select`
+  - render methods have been renamed and reorganized (breaking if extending and
+    overriding)
+- `slider`
+  - An upcoming change will migrate the slider to use the MDC M2 slider. In
+    preparation for this, the MWC slider => MDC slider dependency will not be
+    updated until the migration is complete.
+- `textfield`
+  - render methods have been renamed and reorganized (breaking if extending and
+    overriding)
+  - remove extra space between label and required asterisk (`*`)
+- `top-app-bar(-fixed)`
+  - `--mdc-top-app-bar-width` is now configurable
+
+### Fixed
+
+- `button`
+  - ripple will unripple when mouse/touchend happens outside of button
+- `checkbox`
+  - Remove animation class after the animation ends to prevent replaying animations when hidden and shown, or removed and readded to the DOM
+- `select`
+  - label will be highlighted before selected text during horizontal navigation
+    for screen readers
+  - filled variant now has a ripple
+- `textarea`
+  - label will be highlighted before input during horizontal navigation for
+    screen readers
+  - minlength attribute is now supported
+  - inputmode attribute is now supported
+  - autocapitalize attribute is now supported
+  - remove extra space between label and required asterisk (`*`)
+- `textfield`
+  - label will be highlighted before input during horizontal navigation for
+    screen readers
+  - remove extra space between label and required asterisk (`*`)
+
+### Added
+
+  - `mwc-circular-progress` implemented.
+  - `mwc-circular-progress-four-color` implemented.
+
+## [v0.17.2] - 2020-06-29
+
+### Fixed
+
+- prod dependency breakage based on `@material/dom`
+
+## [v0.17.1] - 2020-06-29
+
+- unused GH tag
+
+## [v0.17.0] - 2020-06-29
+
+### Added
+
+- `linear-progress`
+  - theming sass helpers.
+
+### Changed
+
+- `notched-outline`
+  - **BREAKING** removed border-radius and leading-width custom properties in favor of `--mdc-shape-small`
+- `textarea`
+  - **BREAKING** shape is now customized with `--mdc-shape-small`
+- `textfield`
+  - **BREAKING** shape is now customized with `--mdc-shape-small`
+
+## [v0.16.0] - 2020-06-29
+
+### Fixed
+
+- `mwc-list-item`
+  - get rid of mobile os glow on tap
+  - do not set aria-selected on incompatible roles
+  - ripple will unrip if unclick or touchend is outside of list-item
+- `mwc-list`
+  - fixed regression in list that broke mwc-select in IE or shady dom.
+- Tabs no longer focus on initialization
+- mwc-list-item ripple color will now change based off of --mdc-ripple-color on initialization
+- Fix issue where textfield would throw an error when fed a non-string value
+- list selected item will update if selected item is disconnected
+- `floating-label`: in both `select` and `textfield` the user no longer has to call layout when changing label or outlined
+
+### Added
+
+- `textarea`
+  - added separate internal and external character counters
+- `textfield`
+  - added support for autocapitalize attribute
+- `--mdc-drawer-width` Drawer width is now configurable.
+- Added `name` property `mwc-textfield` & `mwc-textarea` for browser autofill.
+- `ListItem.multipleGraphics` list-item graphic width now configuratble for multiple graphics
+- `Menu.menuCorner` can now configure from which horizontal corner should the menu anchor from.
+- Add `reducedTouchTarget` param to `mwc-checkbox` to control touchscreen accessibility.
+- Typeahead on `mwc-select`
+- Added `focusItemAtIndex(index)` and `getFocusedItemIndex` to both `list` and `menu`
+- Add `--m-ripple-z-index` to control ripple z-index.
+
+### Changed
+
+- `radio`
+  - **BREAKING** renamed `SelectionController` to `SingleSelectionController`
+  - **BREAKING** moved `SingleSelectionController` to `@material/mwc-radio/single-selection-controller.ts`
+  - `SingleSelectionController` now accepts `CheckableElements` rather than just MWC Radio elements
+- `textarea`
+  - **BREAKING** character counters are now external by default
+  - **BREAKING** removed `fullwidth` variant
+- `textfield`
+  - **BREAKING** removed `fullwidth` variant
+- **BREAKING** `--mdc-tab-border-radius` has been removed to align with spec
+- **BREAKING** replaced `--mdc-dialog-shape-radius` with `--mdc-shape-medium`
+- **BREAKING** mwc-checkbox sizing changed to 48x48 by default for touch accessibility. Disable with `reducedTouchTarget` attribute or property.
+- **BREAKING** mwc-select's fullwidth property removed since it was behaving as initially expected. Use `width: 100%` on the root element to accomplish fullwidth.
+
+## [v0.15.0] - 2020-05-05
+
+### Added
+
 - Added --mdc-menu-z-index to menu-surface
 - Added surface/on-surface theme properties for mwc-switch
 - Added overrides for ripple focus and hover opacities
@@ -21,6 +161,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `size` property to `mwc-textfield`
 - `mwc-fab` now has a slot of icons
 - Added `fullwidth` property to `mwc-select`.
+- Added `minLength` to `mwc-textfield`
 
 ### Changed
 
@@ -34,7 +175,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - **BREAKING:VISUAL:** mwc-list-item now internally uses mwc-ripple instead of styling ripple on host
 - `mwc-menu`'s `quick` variant now opens synchronously
 - Convert to [Sass modules](https://sass-lang.com/documentation/at-rules/use)
-- `mwc-select`'s `naturalWidth` property renamed to `naturalMenuWidth` for clarity.
+- **BREAKING** removed textfield's character counter foundation directive
+- Refactor `mwc-select`
+  - **BREAKING:VISUAL** internal structure of select anchor updated.
+  - **BREAKING** `naturalWidth` property renamed to `naturalMenuWidth` for clarity.
+  - **BREAKING:** `--mdc-select-dropdown-icon-opacity` and `--mdc-select-disabled-dropdown-icon-opacity` removed; opacity is now expressed in alpha channel of color.
+  - **BREAKING:VISUAL:** Dropdown arrow icon motion updated.
+  - **BREAKING** remove `helperPersistent` property; helper text now persistent by default if included.
+- Refactor snackbar to conform to other elements' `.open` `.show()` `.close()` APIs
+  - **BREAKING** mwc-snackbar `isOpen` property is now called `open`
+  - **BREAKING** mwc-snackbar `open()` method is now called `show()`
+  - **BREAKING** mwc-snackbar's isOpen -> open property is now editable
+- Removed default slot from switch
+- mwc-select's button role changed to combobox
 
 ### Fixed
 
@@ -45,6 +198,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Fix infinite loop bug in `mwc-tab-bar` when `activeIndex` is set in first render
 - Fixed bug in `mwc-slider` where initializing min and max over `100` would not set correct bounds on UI.
 - Fixed `"` showing up in mwc-button when the ripple activates
+- Changing an invalid textfield's validation properties to valid values will update styles automatically
 
 ## [v0.14.1] - 2020-03-23
 

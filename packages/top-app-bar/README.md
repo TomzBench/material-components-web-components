@@ -11,6 +11,8 @@ For a fixed position version of this component, see [`<mwc-top-app-bar-fixed>`](
 
 [Material Design Guidelines: App Bars: Top](https://material.io/design/components/app-bars-top.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/top-app-bar/)
+
 ## Installation
 
 ```sh
@@ -139,6 +141,12 @@ mwc-top-app-bar {
 | `MDCTopAppBar:nav` | `{}` | Fired when the `navigationIcon` is clicked.
 
 ### CSS Custom Properties
+
+| Name | Default | Description
+| ------------------------- | ------ | ---
+| `--mdc-top-app-bar-width` | `100%` | Width of the `top-app-bar` in relation to the Window.
+
+#### Global Custom Properties
 
 | Name | Default | Description
 | ---- | ------- | -----------

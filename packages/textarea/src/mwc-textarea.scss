@@ -15,68 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-@use '@material/mwc-textfield/src/mwc-textfield.scss';
-@use '@material/textfield';
-@use '@material/theme';
-
-.mdc-text-field.mdc-text-field--filled {
-  overflow: hidden;
-  padding-bottom: 1px;
-
-  .mdc-text-field__input {
-    height: auto;
-  }
-
-  &.mdc-text-field--invalid {
-    @include textfield.bottom-line-color((
-      varname: --mdc-theme-error,
-      fallback: theme.$error
-    ));
-  }
-
-  .mdc-floating-label.mdc-floating-label--float-above {
-    transform: translateY(-50%) scale(0.75);
-    font-size: initial;
-  }
-
-  .mdc-text-field__input, .mdc-text-field-character-counter.hidden + .mdc-text-field__input {
-    padding: 0 16px 0 16px;
-    margin: 20px 0 1px 0;
-  }
-
-  .mdc-text-field-character-counter:not(.hidden) + .mdc-text-field__input {
-    margin-bottom: 28px;
-  }
-
-  .mdc-text-field-character-counter {
-    bottom: 14px;
-  }
-
-  .mdc-floating-label {
-    top: 18px;
-    left: 16px;
-  }
-}
-
 .mdc-text-field {
   height: 100%;
-
-  &.mdc-text-field--outlined {
-    &:not(.mdc-text-field--fullwidth) {
-      .mdc-text-field__input {
-        margin-bottom: 14px;
-        padding-bottom: 0px;
-      }
-
-      .mdc-text-field-character-counter {
-        bottom: 14px;
-
-        &:not(.hidden) + .mdc-text-field__input {
-          margin-bottom: 41px;
-        }
-      }
-    }
-  }
 }
 
 .mdc-text-field__input {

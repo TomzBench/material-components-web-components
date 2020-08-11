@@ -7,6 +7,8 @@ Tabs organize content across different screens, data sets, and other interaction
 
 [Material Design Guidelines: tabs](https://material.io/components/tabs/)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/tabs/)
+
 ## Installation
 
 ```sh
@@ -76,7 +78,6 @@ Name                                 | Default                                  
 `--mdc-tab-height`                   | `48px`                                                   | Height of the tab.
 `--mdc-tab-horizontal-padding`       | `24px`                                                   | Horizontal padding on either side of the tab.
 `--mdc-tab-stacked-height`           | `72px`                                                   | Height of the tab's stacked variant.
-`--mdc-tab-border-radius`            | `0px`                                                    | Tab's border radius (does not clip indicator).
 `--mdc-tab-text-label-color-default` | ![](images/color_0,0,0,60.png) `rgba(0, 0, 0, 0.6)`  | Color of an unactivated tab label.
 `--mdc-tab-color-default`            | ![](images/color_0,0,0,54.png) `rgba(0, 0, 0, 0.54)` | Color of an unactivated icon.
 

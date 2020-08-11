@@ -16,28 +16,30 @@ limitations under the License.
 */
 import '@material/mwc-notched-outline';
 
-import {classMapFromString} from '@material/mwc-base/base-element.js';
-import {MDCFloatingLabelFoundation} from '@material/floating-label/foundation.js';
-import {MDCLineRippleFoundation} from '@material/line-ripple/foundation.js';
-import {addHasRemoveClass, FormElement} from '@material/mwc-base/form-element.js';
+import {MDCFloatingLabelFoundation} from '@material/floating-label/foundation';
+import {MDCLineRippleFoundation} from '@material/line-ripple/foundation';
+import {addHasRemoveClass, FormElement} from '@material/mwc-base/form-element';
+import {observer} from '@material/mwc-base/observer';
 import {floatingLabel, FloatingLabel} from '@material/mwc-floating-label';
 import {lineRipple, LineRipple} from '@material/mwc-line-ripple';
 import {NotchedOutline} from '@material/mwc-notched-outline';
-import {MDCTextFieldAdapter, MDCTextFieldInputAdapter, MDCTextFieldLabelAdapter, MDCTextFieldLineRippleAdapter, MDCTextFieldOutlineAdapter, MDCTextFieldRootAdapter} from '@material/textfield/adapter.js';
-import {MDCTextFieldCharacterCounterFoundation} from '@material/textfield/character-counter/foundation.js';
-import MDCTextFieldFoundation from '@material/textfield/foundation.js';
+import {MDCTextFieldAdapter, MDCTextFieldInputAdapter, MDCTextFieldLabelAdapter, MDCTextFieldLineRippleAdapter, MDCTextFieldOutlineAdapter, MDCTextFieldRootAdapter} from '@material/textfield/adapter';
+import MDCTextFieldFoundation from '@material/textfield/foundation';
 import {eventOptions, html, property, PropertyValues, query, TemplateResult} from 'lit-element';
-import {classMap} from 'lit-html/directives/class-map.js';
-import {ifDefined} from 'lit-html/directives/if-defined.js';
-
-import {characterCounter, CharacterCounter} from './mwc-character-counter-directive.js';
+import {nothing} from 'lit-html';
+import {classMap} from 'lit-html/directives/class-map';
+import {ifDefined} from 'lit-html/directives/if-defined';
+import {live} from 'lit-html/directives/live';
 
 // must be done to get past lit-analyzer checks
 declare global {
+  interface HTMLElement {
+    floatingLabelFoundation?: MDCFloatingLabelFoundation;
+    lineRippleFoundation?: MDCLineRippleFoundation;
+  }
   interface Element {
     floatingLabelFoundation?: MDCFloatingLabelFoundation;
     lineRippleFoundation?: MDCLineRippleFoundation;
-    charCounterFoundation?: MDCTextFieldCharacterCounterFoundation;
   }
 }
 
@@ -103,6 +105,8 @@ export type TextFieldInputMode =
     'verbatim'|'latin'|'latin-name'|'latin-prose'|'full-width-latin'|'kana'|
     'kana-name'|'katakana'|'numeric'|'tel'|'email'|'url';
 
+export type TextAreaCharCounter = 'external'|'internal';
+
 export abstract class TextFieldBase extends FormElement {
   protected mdcFoundation!: MDCTextFieldFoundation;
 
@@ -120,18 +124,19 @@ export abstract class TextFieldBase extends FormElement {
 
   @query('.mdc-notched-outline__notch') protected notchElement!: HTMLElement;
 
-  @query('.mdc-text-field-character-counter')
-  protected charCounterElement!: CharacterCounter;
-
-  @property({type: String}) class = '';
-
   @property({type: String}) value = '';
 
   @property({type: String}) type: TextFieldType = 'text';
 
   @property({type: String}) placeholder = '';
 
-  @property({type: String}) label = '';
+  @property({type: String})
+  @observer(function(this: TextFieldBase, _newVal: string, oldVal: string) {
+    if (oldVal !== undefined && this.label !== oldVal) {
+      this.layout();
+    }
+  })
+  label = '';
 
   @property({type: String}) icon = '';
 
@@ -141,11 +146,17 @@ export abstract class TextFieldBase extends FormElement {
 
   @property({type: Boolean}) required = false;
 
+  @property({type: Number}) minLength = -1;
+
   @property({type: Number}) maxLength = -1;
 
-  @property({type: Boolean, reflect: true}) outlined = false;
-
-  @property({type: Boolean, reflect: true}) fullWidth = false;
+  @property({type: Boolean, reflect: true})
+  @observer(function(this: TextFieldBase, _newVal: boolean, oldVal: boolean) {
+    if (oldVal !== undefined && this.outlined !== oldVal) {
+      this.layout();
+    }
+  })
+  outlined = false;
 
   @property({type: String}) helper = '';
 
@@ -157,9 +168,9 @@ export abstract class TextFieldBase extends FormElement {
 
   @property({type: String}) pattern = '';
 
-  @property({type: Number}) min: number|string = '';
+  @property({type: String}) min: number|string = '';
 
-  @property({type: Number}) max: number|string = '';
+  @property({type: String}) max: number|string = '';
 
   @property({type: Number}) step: number|null = null;
 
@@ -167,13 +178,15 @@ export abstract class TextFieldBase extends FormElement {
 
   @property({type: Boolean}) helperPersistent = false;
 
-  @property({type: Boolean}) charCounter = false;
+  @property({type: Boolean}) charCounter: boolean|TextAreaCharCounter = false;
 
   @property({type: Boolean}) endAligned = false;
 
   @property({type: String}) prefix = '';
 
   @property({type: String}) suffix = '';
+
+  @property({type: String}) name = '';
 
   // lit-analyzer requires specific string types, but TS does not compile since
   // base class is unspecific "string". It also needs non-null coercion (!)
@@ -185,13 +198,14 @@ export abstract class TextFieldBase extends FormElement {
 
   @property({type: Boolean}) readOnly = false;
 
+  @property({type: String}) autocapitalize = '';
+
   @property({type: Boolean}) protected outlineOpen = false;
   @property({type: Number}) protected outlineWidth = 0;
   @property({type: Boolean}) protected isUiValid = true;
 
   protected _validity: ValidityState = createValidityObj();
   protected _outlineUpdateComplete: null|Promise<unknown> = null;
-  protected _valueSetOnInputEvent = false;
 
   get validity(): ValidityState {
     this._checkValidity(this.value);
@@ -246,89 +260,90 @@ export abstract class TextFieldBase extends FormElement {
         selectionStart, selectionEnd, selectionDirection);
   }
 
+  update(changedProperties: PropertyValues) {
+    if (changedProperties.has('value') && typeof this.value !== 'string') {
+      this.value = `${this.value}`;
+    }
+
+    super.update(changedProperties);
+  }
+
   render() {
     const classes = Object.assign({}, {
       'mdc-text-field--disabled': this.disabled,
       'mdc-text-field--no-label': !this.label,
       'mdc-text-field--filled': !this.outlined,
       'mdc-text-field--outlined': this.outlined,
-      'mdc-text-field--fullwidth': this.fullWidth,
       'mdc-text-field--with-leading-icon': this.icon,
       'mdc-text-field--with-trailing-icon': this.iconTrailing,
       'mdc-text-field--end-aligned': this.endAligned,
     }, classMapFromString(this.class));
 
-    const ripple =
-        !this.outlined ? html`<div class="mdc-text-field__ripple"></div>` : '';
     return html`
       <label class="mdc-text-field ${classMap(classes)}">
-        ${ripple}
-        ${this.icon ? this.renderIcon(this.icon) : ''}
-        ${this.prefix ? this.renderAffix(this.prefix) : ''}
+        ${this.renderRipple()}
+        ${this.outlined ? this.renderOutline() : this.renderLabel()}
+        ${this.renderLeadingIcon()}
+        ${this.renderPrefix()}
         ${this.renderInput()}
-        ${this.suffix ? this.renderAffix(this.suffix, true) : ''}
-        ${this.iconTrailing ? this.renderIcon(this.iconTrailing, true) : ''}
-        ${this.outlined ? this.renderOutlined() : this.renderLabelText()}
+        ${this.renderSuffix()}
+        ${this.renderTrailingIcon()}
+        ${this.renderLineRipple()}
       </label>
       ${this.renderHelperText(this.renderCharCounter())}
     `;
   }
 
   updated(changedProperties: PropertyValues) {
-    const maxLength = changedProperties.get('maxLength') as number | undefined;
-
-    const maxLengthBecameDefined = maxLength === -1 && this.maxLength !== -1;
-    const maxLengthBecameUndefined =
-        maxLength !== undefined && maxLength !== -1 && this.maxLength === -1;
-
-    /* We want to recreate the foundation if maxLength changes to defined or
-     * undefined, because the textfield foundation needs to be instantiated with
-     * the char counter's foundation, and the char counter's foundation needs
-     * to have maxLength defined to be instantiated. Additionally, there is no
-     * exposed API on the MdcTextFieldFoundation to dynamically add a char
-     * counter foundation, so we must recreate it.
-     */
-    if (maxLengthBecameDefined || maxLengthBecameUndefined) {
-      this.createFoundation();
-    }
-
     if (changedProperties.has('value') &&
         changedProperties.get('value') !== undefined) {
       this.mdcFoundation.setValue(this.value);
     }
   }
 
-  protected renderInput() {
-    const maxOrUndef = this.maxLength === -1 ? undefined : this.maxLength;
+  protected renderRipple() {
+    if (this.outlined) {
+      return nothing;
+    }
+
     return html`
-      <input
-          aria-labelledby="label"
-          class="mdc-text-field__input"
-          type="${this.type}"
-          .value="${this.value}"
-          ?disabled="${this.disabled}"
-          placeholder="${this.placeholder}"
-          ?required="${this.required}"
-          ?readonly="${this.readOnly}"
-          maxlength="${ifDefined(maxOrUndef)}"
-          pattern="${ifDefined(this.pattern ? this.pattern : undefined)}"
-          min="${ifDefined(this.min === '' ? undefined : this.min as number)}"
-          max="${ifDefined(this.max === '' ? undefined : this.max as number)}"
-          step="${ifDefined(this.step === null ? undefined : this.step)}"
-          size="${ifDefined(this.size === null ? undefined : this.size)}"
-          inputmode="${ifDefined(this.inputMode)}"
-          @input="${this.handleInputChange}"
-          @blur="${this.onInputBlur}">`;
+      <span class="mdc-text-field__ripple"></span>
+    `;
   }
 
-  protected renderAffix(content: string, isSuffix = false) {
-    const classes = {
-      'mdc-text-field__affix--prefix': !isSuffix,
-      'mdc-text-field__affix--suffix': isSuffix
-    };
+  protected renderOutline() {
+    if (!this.outlined) {
+      return nothing;
+    }
 
-    return html`<span class="mdc-text-field__affix ${classMap(classes)}">
-        ${content}</span>`;
+    return html`
+      <mwc-notched-outline
+          .width=${this.outlineWidth}
+          .open=${this.outlineOpen}
+          class="mdc-notched-outline">
+        ${this.renderLabel()}
+      </mwc-notched-outline>`;
+  }
+
+  protected renderLabel() {
+    if (!this.label) {
+      return nothing;
+    }
+
+    return html`
+      <span
+          .floatingLabelFoundation=${floatingLabel(this.label)}
+          id="label">${this.label}</span>
+    `;
+  }
+
+  protected renderLeadingIcon() {
+    return this.icon ? this.renderIcon(this.icon) : nothing;
+  }
+
+  protected renderTrailingIcon() {
+    return this.iconTrailing ? this.renderIcon(this.iconTrailing, true) :
+                               nothing;
   }
 
   protected renderIcon(icon: string, isTrailingIcon = false) {
@@ -341,57 +356,82 @@ export abstract class TextFieldBase extends FormElement {
         classMap(classes)}">${icon}</i>`;
   }
 
-  protected renderOutlined() {
-    let labelTemplate: TemplateResult|string = '';
-    if (this.label) {
-      labelTemplate = html`
-        <span
-            .floatingLabelFoundation=${floatingLabel(this.label)}
-            @labelchange=${this.onLabelChange}
-            id="label">
-          ${this.label}
-        </span>
-      `;
-    }
-    return html`
-      <mwc-notched-outline
-          .width=${this.outlineWidth}
-          .open=${this.outlineOpen}
-          class="mdc-notched-outline">
-        ${labelTemplate}
-      </mwc-notched-outline>`;
+  protected renderPrefix() {
+    return this.prefix ? this.renderAffix(this.prefix) : nothing;
   }
 
-  protected renderLabelText() {
-    let labelTemplate: TemplateResult|string = '';
-    if (this.label && !this.fullWidth) {
-      labelTemplate = html`
-      <span
-          .floatingLabelFoundation=${floatingLabel(this.label)}
-          id="label">
-        ${this.label}
-      </span>`;
+  protected renderSuffix() {
+    return this.suffix ? this.renderAffix(this.suffix, true) : nothing;
+  }
+
+  protected renderAffix(content: string, isSuffix = false) {
+    const classes = {
+      'mdc-text-field__affix--prefix': !isSuffix,
+      'mdc-text-field__affix--suffix': isSuffix
+    };
+
+    return html`<span class="mdc-text-field__affix ${classMap(classes)}">
+        ${content}</span>`;
+  }
+
+  protected renderInput() {
+    const minOrUndef = this.minLength === -1 ? undefined : this.minLength;
+    const maxOrUndef = this.maxLength === -1 ? undefined : this.maxLength;
+    const autocapitalizeOrUndef = this.autocapitalize ?
+        this.autocapitalize as (
+            'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters') :
+        undefined;
+    // TODO: live() directive needs casting for lit-analyzer
+    // https://github.com/runem/lit-analyzer/pull/91/files
+    // TODO: lit-analyzer labels min/max as (number|string) instead of string
+    return html`
+      <input
+          aria-labelledby="label"
+          class="mdc-text-field__input"
+          type="${this.type}"
+          .value="${live(this.value) as unknown as string}"
+          ?disabled="${this.disabled}"
+          placeholder="${this.placeholder}"
+          ?required="${this.required}"
+          ?readonly="${this.readOnly}"
+          minlength="${ifDefined(minOrUndef)}"
+          maxlength="${ifDefined(maxOrUndef)}"
+          pattern="${ifDefined(this.pattern ? this.pattern : undefined)}"
+          min="${ifDefined(this.min === '' ? undefined : this.min as number)}"
+          max="${ifDefined(this.max === '' ? undefined : this.max as number)}"
+          step="${ifDefined(this.step === null ? undefined : this.step)}"
+          size="${ifDefined(this.size === null ? undefined : this.size)}"
+          name="${ifDefined(this.name === '' ? undefined : this.name)}"
+          inputmode="${ifDefined(this.inputMode)}"
+          autocapitalize="${ifDefined(autocapitalizeOrUndef)}"
+          @input="${this.handleInputChange}"
+          @blur="${this.onInputBlur}">`;
+  }
+
+  protected renderLineRipple() {
+    if (this.outlined) {
+      return nothing;
     }
 
     return html`
-      ${labelTemplate}
       <span .lineRippleFoundation=${lineRipple()}></span>
     `;
   }
 
-  protected renderHelperText(charCounterTemplate?: TemplateResult) {
+  protected renderHelperText(
+      charCounterTemplate: TemplateResult|typeof nothing = nothing) {
+    if (!this.shouldRenderHelperText) {
+      return nothing;
+    }
+
     const showValidationMessage = this.validationMessage && !this.isUiValid;
     const classes = {
       'mdc-text-field-helper-text--persistent': this.helperPersistent,
       'mdc-text-field-helper-text--validation-msg': showValidationMessage,
     };
 
-    const rootClasses = {
-      hidden: !this.shouldRenderHelperText,
-    };
-
     return html`
-      <div class="mdc-text-field-helper-line ${classMap(rootClasses)}">
+      <div class="mdc-text-field-helper-line">
         <div class="mdc-text-field-helper-text ${classMap(classes)}">${
         showValidationMessage ? this.validationMessage : this.helper}</div>
         ${charCounterTemplate}
@@ -400,15 +440,13 @@ export abstract class TextFieldBase extends FormElement {
   }
 
   protected renderCharCounter() {
-    const counterClasses = {
-      hidden: !this.charCounterVisible,
-    };
+    if (!this.charCounterVisible) {
+      return nothing;
+    }
 
-    return html`
-      <div
-          class="${classMap(counterClasses)}"
-          .charCounterFoundation=${characterCounter()}>
-      </div>`;
+    const length = Math.min(this.value.length, this.maxLength);
+    return html`<span class="mdc-text-field-character-counter">${length} / ${
+        this.maxLength}</span>`;
   }
 
   protected onInputBlur() {
@@ -461,7 +499,6 @@ export abstract class TextFieldBase extends FormElement {
 
   @eventOptions({passive: true})
   protected handleInputChange() {
-    this._valueSetOnInputEvent = true;
     this.value = this.formElement.value;
 
     if (this.autoValidate) {
@@ -469,25 +506,11 @@ export abstract class TextFieldBase extends FormElement {
     }
   }
 
-  shouldUpdate(changedProperties: PropertyValues) {
-    // cannot set value on safari on input event as this causes caret to jump
-    if (changedProperties.has('value') && this._valueSetOnInputEvent) {
-      this._valueSetOnInputEvent = false;
-      return false;
-    }
-
-    return super.shouldUpdate(changedProperties);
-  }
-
   protected createFoundation() {
     if (this.mdcFoundation !== undefined) {
       this.mdcFoundation.destroy();
     }
-    this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter(), {
-      characterCounter: this.maxLength !== -1 ?
-          this.charCounterElement.charCounterFoundation :
-          undefined
-    });
+    this.mdcFoundation = new this.mdcFoundationClass(this.createAdapter());
     this.mdcFoundation.init();
   }
 
@@ -507,18 +530,14 @@ export abstract class TextFieldBase extends FormElement {
           this.addEventListener(evtType, handler),
       deregisterTextFieldInteractionHandler: (evtType, handler) =>
           this.removeEventListener(evtType, handler),
-      registerValidationAttributeChangeHandler: () => {
+      registerValidationAttributeChangeHandler: (handler) => {
         const getAttributesList =
             (mutationsList: MutationRecord[]): string[] => {
               return mutationsList.map((mutation) => mutation.attributeName)
                          .filter((attributeName) => attributeName) as string[];
             };
         const observer = new MutationObserver((mutationsList) => {
-          const attributes = getAttributesList(mutationsList);
-          if (attributes.indexOf('maxlength') !== -1 && this.maxLength !== -1) {
-            this.charCounterElement.charCounterFoundation.setCounterValue(
-                this.value.length, this.maxLength);
-          }
+          handler(getAttributesList(mutationsList));
         });
         const config = {attributes: true};
         observer.observe(this.formElement, config);
@@ -556,6 +575,11 @@ export abstract class TextFieldBase extends FormElement {
       hasLabel: () => Boolean(this.labelElement),
       shakeLabel: (shouldShake: boolean) => this.labelElement &&
           this.labelElement.floatingLabelFoundation.shake(shouldShake),
+      setLabelRequired: (isRequired: boolean) => {
+        if (this.labelElement) {
+          this.labelElement.floatingLabelFoundation.setRequired(isRequired);
+        }
+      },
     };
   }
 
@@ -613,26 +637,35 @@ export abstract class TextFieldBase extends FormElement {
     };
   }
 
-  protected async onLabelChange() {
-    if (this.label) {
-      await this.layout();
-    }
-  }
-
   async layout() {
     await this.updateComplete;
 
-    if (this.labelElement && this.outlineElement) {
-      /* When the textfield automatically notches due to a value and label
-       * being defined, the textfield may be set to `display: none` by the user.
-       * this means that the notch is of size 0px. We provide this function so
-       * that the user may manually resize the notch to the floated label's
-       * width.
-       */
-      const labelWidth = this.labelElement.floatingLabelFoundation.getWidth();
-      if (this.outlineOpen) {
-        this.outlineWidth = labelWidth;
-      }
+    const labelElement = this.labelElement;
+
+    if (!labelElement) {
+      this.outlineOpen = false;
+      return;
+    }
+
+    const shouldFloat = !!this.label && !!this.value;
+    labelElement.floatingLabelFoundation.float(shouldFloat);
+
+    if (!this.outlined) {
+      return;
+    }
+
+    this.outlineOpen = shouldFloat;
+    await this.updateComplete;
+
+    /* When the textfield automatically notches due to a value and label
+     * being defined, the textfield may be set to `display: none` by the user.
+     * this means that the notch is of size 0px. We provide this function so
+     * that the user may manually resize the notch to the floated label's
+     * width.
+     */
+    const labelWidth = labelElement.floatingLabelFoundation.getWidth();
+    if (this.outlineOpen) {
+      this.outlineWidth = labelWidth;
     }
   }
 }

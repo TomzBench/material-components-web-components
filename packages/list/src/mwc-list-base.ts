@@ -24,7 +24,7 @@ import {ifDefined} from 'lit-html/directives/if-defined.js';
 import {MDCListAdapter} from './mwc-list-adapter.js';
 import MDCListFoundation, {ActionDetail, isIndexSet, SelectedDetail} from './mwc-list-foundation.js';
 import {MWCListIndex} from './mwc-list-foundation.js';
-import {ListItemBase, RequestSelectedDetail} from './mwc-list-item-base.js';
+import {Layoutable, ListItemBase, RequestSelectedDetail} from './mwc-list-item-base.js';
 
 export {createSetFromIndex, isEventMulti, isIndexSet, MWCListIndex} from './mwc-list-foundation.js';
 
@@ -36,8 +36,9 @@ const isListItem = (element: Element): element is ListItemBase => {
 /**
  * @fires selected {SelectedDetail}
  * @fires action {ActionDetail}
+ * @fires items-updated
  */
-export abstract class ListBase extends BaseElement {
+export abstract class ListBase extends BaseElement implements Layoutable {
   protected mdcFoundation!: MDCListFoundation;
   protected mdcAdapter: MDCListAdapter|null = null;
 
@@ -133,6 +134,7 @@ export abstract class ListBase extends BaseElement {
     for (const node of nodes) {
       if (isListItem(node)) {
         listItems.push(node);
+        node._managingList = this;
       }
 
       if (node.hasAttribute('divider') && !node.hasAttribute('role')) {
@@ -162,6 +164,10 @@ export abstract class ListBase extends BaseElement {
           selectedIndices.size ? selectedIndices.entries().next().value[1] : -1;
       this.select(index);
     }
+
+    const itemsUpdatedEv =
+        new Event('items-updated', {bubbles: true, composed: true});
+    this.dispatchEvent(itemsUpdatedEv);
   }
 
   get selected(): ListItemBase|ListItemBase[]|null {
@@ -250,10 +256,17 @@ export abstract class ListBase extends BaseElement {
 
   protected onRequestSelected(evt: CustomEvent<RequestSelectedDetail>) {
     if (this.mdcFoundation) {
-      const index = this.getIndexOfTarget(evt);
+      let index = this.getIndexOfTarget(evt);
 
+      // might happen in shady dom slowness. Recalc children
       if (index === -1) {
-        return;
+        this.layout();
+        index = this.getIndexOfTarget(evt);
+
+        // still not found; may not be mwc-list-item. Unsupported case.
+        if (index === -1) {
+          return;
+        }
       }
 
       const element = this.items[index];
@@ -299,31 +312,7 @@ export abstract class ListBase extends BaseElement {
 
         return 0;
       },
-      getFocusedElementIndex: () => {
-        if (!this.mdcRoot) {
-          return -1;
-        }
-
-        if (!this.items.length) {
-          return -1;
-        }
-
-        const activeElementPath = deepActiveElementPath();
-
-        if (!activeElementPath.length) {
-          return -1;
-        }
-
-        for (let i = activeElementPath.length - 1; i >= 0; i--) {
-          const activeItem = activeElementPath[i];
-
-          if (isListItem(activeItem)) {
-            return this.items.indexOf(activeItem);
-          }
-        }
-
-        return -1;
-      },
+      getFocusedElementIndex: this.getFocusedItemIndex,
       getAttributeForElementIndex: (index, attr) => {
         const listElement = this.mdcRoot;
         if (!listElement) {
@@ -457,7 +446,7 @@ export abstract class ListBase extends BaseElement {
     }
   }
 
-  protected onListItemConnected(e: Event) {
+  protected onListItemConnected(e: CustomEvent) {
     const target = e.target as ListItemBase;
 
     this.layout(this.items.indexOf(target) === -1);
@@ -483,6 +472,44 @@ export abstract class ListBase extends BaseElement {
         first.tabindex = 0;
       }
     }
+  }
+
+  getFocusedItemIndex() {
+    if (!this.mdcRoot) {
+      return -1;
+    }
+
+    if (!this.items.length) {
+      return -1;
+    }
+
+    const activeElementPath = deepActiveElementPath();
+
+    if (!activeElementPath.length) {
+      return -1;
+    }
+
+    for (let i = activeElementPath.length - 1; i >= 0; i--) {
+      const activeItem = activeElementPath[i];
+
+      if (isListItem(activeItem)) {
+        return this.items.indexOf(activeItem);
+      }
+    }
+
+    return -1;
+  }
+
+  focusItemAtIndex(index: number) {
+    for (const item of this.items) {
+      if (item.tabindex === 0) {
+        item.tabindex = -1;
+        break;
+      }
+    }
+
+    this.items[index].tabindex = 0;
+    this.items[index].focus();
   }
 
   focus() {

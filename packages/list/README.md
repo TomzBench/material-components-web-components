@@ -9,6 +9,8 @@ Lists are continuous, vertical indexes of text or images.
 
 [Material Design Guidelines: lists](https://material.io/design/components/lists.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/list/)
+
 ## Installation
 
 ```sh
@@ -404,19 +406,20 @@ it may be simple to just set `--mdc-ripple-color` to `transparent`.
 
 #### mwc-list-item
 
-| Name             | Type                | Default | Description
-| ---------------- | ------------------- | ------- | -----------
-| `value`          | `string`            | `''`    | Value associated with this list item (used by `mwc-select`).
-| `group`          | `string\|null`      | `null`  | Used to group items together (used by `mwc-menu` for menu selection groups and `mwc-radio-list-element`).
-| `tabindex`       | `number`            | `-1`    | Reflects `tabindex` and sets internal tab indices.
-| `disabled`       | `boolean`           | `false` | Reflects `disabled` and sets internal `disabled` attributes.
-| `twoline`        | `boolean`           | `false` | Activates the two-line variant and enables the `secondary` slot.
-| `activated`      | `boolean`           | `false` | Activates focus-persistent ripple.
-| `graphic`        | `GraphicType`*      | `null`  | Determines which graphic layout to show and enables the `graphic` slot.
-| `hasMeta`        | `boolean`           | `false` | Activates the meta layout tile and enables the `meta` slot.
-| `noninteractive` | `boolean`           | `false` | Disables focus and pointer events for the list item.
-| `selected`       | `boolean`           | `false` | Denotes that the list item is selected.
-| `text`           | `string` (readonly) | `''`    | Trimmed `textContent` of the list item.
+| Name               | Type                | Default | Description
+| ------------------ | ------------------- | ------- | -----------
+| `value`            | `string`            | `''`    | Value associated with this list item (used by `mwc-select`).
+| `group`            | `string\|null`      | `null`  | Used to group items together (used by `mwc-menu` for menu selection groups and `mwc-radio-list-element`).
+| `tabindex`         | `number`            | `-1`    | Reflects `tabindex` and sets internal tab indices.
+| `disabled`         | `boolean`           | `false` | Reflects `disabled` and sets internal `disabled` attributes.
+| `twoline`          | `boolean`           | `false` | Activates the two-line variant and enables the `secondary` slot.
+| `activated`        | `boolean`           | `false` | Activates focus-persistent ripple.
+| `graphic`          | `GraphicType`*      | `null`  | Determines which graphic layout to show and enables the `graphic` slot.
+| `multipleGraphics` | `boolean`           | `false` | Allows arbitrary width for multiple slotted graphics.
+| `hasMeta`          | `boolean`           | `false` | Activates the meta layout tile and enables the `meta` slot.
+| `noninteractive`   | `boolean`           | `false` | Disables focus and pointer events for the list item.
+| `selected`         | `boolean`           | `false` | Denotes that the list item is selected.
+| `text`             | `string` (readonly) | `''`    | Trimmed `textContent` of the list item.
 
 \* `GraphicType` is equivalent to the type
 `'avatar'|'icon'|'medium'|'large'|'control'|null`.
@@ -456,6 +459,8 @@ of `mwc-list-item`, so all properties in `mwc-list-item` will be available on
 | -------- | -------------
 | `select(index: MWCListIndex) => void` | Selects the elements at the given index / indices.
 | `toggle(index: number, force?: boolean) => void` | Toggles the selected index, and forcibly selects or deselects the value of `force` if attribtue is provided.
+| `getFocusedItemIndex() => number` | Returns the index of the currently-focused item. `-1` if none are focused.
+| `focusItemAtIndex(index) => void` | Focuses the item at the given index and manages tabindex on all other items.
 | `layout(updateItems = true) => void` | Resets tabindex on all items and will update items model if provided true. It may be required to call layout if selectability of an element is dynamically changed. e.g. `[mwc-list-item]` attribute is removed from a list item or `noninteractive` is dynamically set on a list item.
 
 ### Events
@@ -570,7 +575,7 @@ interface RequestSelectedDetail {
 | `--mdc-theme-hint-on-background`           | ![](images/color_0,0,0,38.png) `rgba(0, 0, 0, .38)` | Color of the meta (if is text or text icon).
 | `--mdc-list-side-padding`                  | `16px`               | Side padding of the list item.
 | `--mdc-list-item-meta-size`                | `24px`               | Line height of the meta icon or text and width & height of the slotted parent wrapper.
-| `--mdc-list-item-graphic-size`             | `24px`,`40px`,`56px` | Line height of the graphic and width & height of the slotted parent wrapper. `24px` when graphic is `"icon"`. `40px` when grpahic is `"avatar"`. `56px` when graphic is `"medium"`, and `"large"`.
+| `--mdc-list-item-graphic-size`             | `24px`,`40px`,`56px` | Line height of the graphic and width & height of the slotted parent wrapper. `24px` when graphic is `"icon"`. `40px` when graphic is `"avatar"`. `56px` when graphic is `"medium"`, and `"large"`.
 | `--mdc-list-item-graphic-margin`           | `16px`,`32px`        | Margin between the text and graphic. `16px` when graphic is `"avatar"`, `"medium"`, `"large"`, and `"control"`. `32px` when graphic is `"icon"`.
 
 `mwc-list-item` internally uses [`mwc-ripple`](https://github.com/material-components/material-components-web-components/tree/master/packages/list)

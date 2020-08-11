@@ -17,29 +17,28 @@ limitations under the License.
 import '@material/mwc-list';
 import './mwc-menu-surface';
 
-import {classMapFromString} from '@material/mwc-base/base-element.js';
-import {classMap} from 'lit-html/directives/class-map.js';
-import {MDCMenuAdapter} from '@material/menu/adapter.js';
-import {DefaultFocusState as DefaultFocusStateEnum} from '@material/menu/constants.js';
-import MDCMenuFoundation from '@material/menu/foundation.js';
-import {BaseElement} from '@material/mwc-base/base-element.js';
-import {observer} from '@material/mwc-base/observer.js';
+import {MDCMenuAdapter} from '@material/menu/adapter';
+import {DefaultFocusState as DefaultFocusStateEnum} from '@material/menu/constants';
+import MDCMenuFoundation from '@material/menu/foundation';
+import {BaseElement} from '@material/mwc-base/base-element';
+import {observer} from '@material/mwc-base/observer';
 import {List, MWCListIndex} from '@material/mwc-list';
-import {ActionDetail} from '@material/mwc-list/mwc-list-foundation.js';
-import {ListItemBase} from '@material/mwc-list/mwc-list-item-base.js';
+import {ActionDetail} from '@material/mwc-list/mwc-list-foundation';
+import {ListItemBase} from '@material/mwc-list/mwc-list-item-base';
 import {html, property, query} from 'lit-element';
 
 import {MenuSurface} from './mwc-menu-surface';
-import {Corner} from './mwc-menu-surface-base';
+import {Corner, MenuCorner} from './mwc-menu-surface-base';
 
 export {createSetFromIndex, isEventMulti, isIndexSet, MWCListIndex} from '@material/mwc-list/mwc-list-foundation';
-export {Corner} from './mwc-menu-surface-base';
+export {Corner, MenuCorner} from './mwc-menu-surface-base';
 
 export type DefaultFocusState = keyof typeof DefaultFocusStateEnum;
 
 /**
  * @fires selected {SelectedDetail}
  * @fires action {ActionDetail}
+ * @fires items-updated
  * @fires opened
  * @fires closed
  */
@@ -83,6 +82,8 @@ export abstract class MenuBase extends BaseElement {
   @property({type: Boolean}) forceGroupSelection = false;
 
   @property({type: Boolean}) fullwidth = false;
+
+  @property({type: String}) menuCorner: MenuCorner = 'START';
 
   @property({type: String})
   @observer(function(this: MenuBase, value: DefaultFocusState) {
@@ -148,9 +149,8 @@ export abstract class MenuBase extends BaseElement {
           .absolute=${this.absolute}
           .fixed=${this.fixed}
           .fullwidth=${this.fullwidth}
-          class="${classMap(
-            classMapFromString(this.class)
-          )} mdc-menu mdc-menu-surface"
+          .menuCorner=${this.menuCorner}
+          class="mdc-menu mdc-menu-surface"
           @closed=${this.onClosed}
           @opened=${this.onOpened}
           @keydown=${this.onKeydown}>
@@ -380,6 +380,24 @@ export abstract class MenuBase extends BaseElement {
 
   show() {
     this.open = true;
+  }
+
+  getFocusedItemIndex() {
+    const listElement = this.listElement;
+
+    if (listElement) {
+      return listElement.getFocusedItemIndex();
+    }
+
+    return -1;
+  }
+
+  focusItemAtIndex(index: number) {
+    const listElement = this.listElement;
+
+    if (listElement) {
+      listElement.focusItemAtIndex(index);
+    }
   }
 
   layout(updateItems = true) {

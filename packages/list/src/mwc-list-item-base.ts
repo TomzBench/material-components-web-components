@@ -15,17 +15,22 @@
  limitations under the License.
  */
 
-import '@material/mwc-ripple';
+import '@material/mwc-ripple/mwc-ripple';
 
 import {observer} from '@material/mwc-base/observer';
-import {Ripple} from '@material/mwc-ripple';
+import {Ripple} from '@material/mwc-ripple/mwc-ripple';
 import {RippleHandlers} from '@material/mwc-ripple/ripple-handlers';
 import {html, internalProperty, LitElement, property, query, queryAsync} from 'lit-element';
+import {classMap} from 'lit-html/directives/class-map';
 
 export type SelectionSource = 'interaction'|'property';
 export interface RequestSelectedDetail {
   selected: boolean;
   source: SelectionSource;
+}
+
+export interface Layoutable {
+  layout: (updateItems?: boolean) => void;
 }
 
 export type GraphicType = 'avatar'|'icon'|'medium'|'large'|'control'|null;
@@ -53,6 +58,7 @@ export class ListItemBase extends LitElement {
   @property({type: Boolean, reflect: true}) twoline = false;
   @property({type: Boolean, reflect: true}) activated = false;
   @property({type: String, reflect: true}) graphic: GraphicType = null;
+  @property({type: Boolean}) multipleGraphics = false;
   @property({type: Boolean}) hasMeta = false;
   @property({type: Boolean, reflect: true})
   @observer(function(this: ListItemBase, value: boolean) {
@@ -69,9 +75,13 @@ export class ListItemBase extends LitElement {
   noninteractive = false;
   @property({type: Boolean, reflect: true})
   @observer(function(this: ListItemBase, value: boolean) {
-    if (value) {
+    const role = this.getAttribute('role');
+    const isAriaSelectable = role === 'gridcell' || role === 'option' ||
+        role === 'row' || role === 'tab';
+
+    if (isAriaSelectable && value) {
       this.setAttribute('aria-selected', 'true');
-    } else {
+    } else if (isAriaSelectable) {
       this.setAttribute('aria-selected', 'false');
     }
 
@@ -89,6 +99,7 @@ export class ListItemBase extends LitElement {
   selected = false;
 
   @internalProperty() protected shouldRenderRipple = false;
+  @internalProperty() _managingList: Layoutable|null = null;
 
   protected boundOnClick = this.onClick.bind(this);
   protected _firstChanged = true;
@@ -109,7 +120,7 @@ export class ListItemBase extends LitElement {
           cb:
               () => {
                 this.onClick();
-              }
+              },
         },
         {
           target: this,
@@ -134,13 +145,12 @@ export class ListItemBase extends LitElement {
         {
           target: this,
           eventNames: ['mousedown', 'touchstart'],
-          cb: this.rippleHandlers.startPress,
+          cb:
+              (e: Event) => {
+                const name = e.type;
+                this.onDown(name === 'mousedown' ? 'mouseup' : 'touchend', e);
+              },
         },
-        {
-          target: this,
-          eventNames: ['mouseup', 'touchend'],
-          cb: this.rippleHandlers.endPress,
-        }
       ];
 
   get text() {
@@ -175,8 +185,13 @@ export class ListItemBase extends LitElement {
   }
 
   protected renderGraphic() {
+    const graphicClasses = {
+      multi: this.multipleGraphics,
+    };
+
     return html`
-      <span class="mdc-list-item__graphic material-icons">
+      <span class="mdc-list-item__graphic material-icons ${
+        classMap(graphicClasses)}">
         <slot name="graphic"></slot>
       </span>`;
   }
@@ -215,6 +230,16 @@ export class ListItemBase extends LitElement {
     this.fireRequestSelected(!this.selected, 'interaction');
   }
 
+  protected onDown(upName: string, evt: Event) {
+    const onUp = () => {
+      window.removeEventListener(upName, onUp);
+      this.rippleHandlers.endPress();
+    };
+
+    window.addEventListener(upName, onUp);
+    this.rippleHandlers.startPress(evt);
+  }
+
   protected fireRequestSelected(selected: boolean, source: SelectionSource) {
     if (this.noninteractive) {
       return;
@@ -250,10 +275,14 @@ export class ListItemBase extends LitElement {
         listener.target.removeEventListener(eventName, listener.cb);
       }
     }
+
+    if (this._managingList) {
+      this._managingList.layout(true);
+    }
   }
 
   protected firstUpdated() {
-    this.dispatchEvent(
-        new Event('list-item-rendered', {bubbles: true, composed: true}));
+    const ev = new Event('list-item-rendered', {bubbles: true, composed: true});
+    this.dispatchEvent(ev);
   }
 }

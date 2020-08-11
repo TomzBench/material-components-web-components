@@ -23,10 +23,6 @@ import {html} from 'lit-html';
 
 import {fixture, rafPromise, TestFixture} from '../../../../test/src/util/helpers';
 
-interface TextfieldInternals {
-  createFoundation: () => void;
-}
-
 const basic = (outlined = false) => html`
   <mwc-textfield ?outlined=${outlined}></mwc-textfield>
 `;
@@ -78,6 +74,15 @@ const isUiInvalid = (element: TextField) => {
   return !!element.shadowRoot!.querySelector(`.${cssClasses.INVALID}`);
 };
 
+const asDateType = html`
+  <mwc-textfield
+    type="date"
+    min="${'2020-01-01' as unknown as number}"
+    max="${'2020-12-31' as unknown as number}"
+    ?required="${true}">
+  </mwc-textfield>
+`;
+
 suite('mwc-textfield:', () => {
   let fixt: TestFixture;
 
@@ -98,6 +103,24 @@ suite('mwc-textfield:', () => {
 
       const inputElement = element.shadowRoot!.querySelector('input');
       assert(inputElement, 'my test value');
+    });
+
+    test('setting non-string values stringifies values', async () => {
+      (element.value as unknown as undefined) = undefined;
+      await element.updateComplete;
+      assert.equal(element.value, 'undefined');
+
+      (element.value as unknown as null) = null;
+      await element.updateComplete;
+      assert.equal(element.value, 'null');
+
+      (element.value as unknown as number) = 15;
+      await element.updateComplete;
+      assert.equal(element.value, '15');
+
+      (element.value as unknown as {}) = {};
+      await element.updateComplete;
+      assert.equal(element.value, '[object Object]');
     });
 
     teardown(() => {
@@ -488,7 +511,7 @@ suite('mwc-textfield:', () => {
       let labelWidth = floatingLabel.floatingLabelFoundation.getWidth();
       assert.isTrue(notchedOutline.open);
       let diff = Math.abs(outlineWidth - labelWidth);
-      assert.isTrue(diff < 3);
+      assert.isTrue(diff < 5);
 
       element.label = 'this is some other label';
 
@@ -502,144 +525,7 @@ suite('mwc-textfield:', () => {
       outlineWidth = notchedOutline.width;
       labelWidth = floatingLabel.floatingLabelFoundation.getWidth();
       diff = Math.abs(outlineWidth - labelWidth);
-      assert.isTrue(diff < 3);
-    });
-
-    teardown(() => {
-      if (fixt) {
-        fixt.remove();
-      }
-    });
-  });
-
-  suite('helper and char counter rendering', () => {
-    let fixt: TestFixture;
-
-    setup(async () => {
-      fixt = await fixture(basic());
-    });
-
-    test('createFoundation called an appropriate amount of times', async () => {
-      const element = fixt.root.querySelector('mwc-textfield')!;
-      const internals = element as unknown as TextfieldInternals;
-      element.helperPersistent = true;
-
-      const oldCreateFoundation =
-          internals.createFoundation.bind(element) as () => void;
-      let numTimesCreateFoundationCalled = 0;
-
-      internals.createFoundation = () => {
-        numTimesCreateFoundationCalled = numTimesCreateFoundationCalled + 1;
-        oldCreateFoundation();
-      };
-
-      const charCounters = element.shadowRoot!.querySelectorAll(
-          '.mdc-text-field-character-counter');
-
-      assert.strictEqual(charCounters.length, 1, 'only one char counter');
-
-      const charCounter = charCounters[0] as HTMLElement;
-      const helperText = element.shadowRoot!.querySelector(
-                             '.mdc-text-field-helper-text') as HTMLElement;
-
-
-      assert.strictEqual(
-          charCounter.offsetWidth, 0, 'char counter initially hidden');
-      assert.strictEqual(
-          helperText.offsetWidth, 0, 'helper line initially hidden');
-
-      element.helper = 'my helper';
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          0,
-          'foundation not recreated due to helper change');
-      assert.strictEqual(
-          charCounter.offsetWidth,
-          0,
-          'char counter hidden when only helper defined');
-      assert.isTrue(
-          helperText.offsetWidth > 0, 'helper text shown when defined');
-
-      element.helper = '';
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          0,
-          'foundation not recreated due to helper change');
-      assert.strictEqual(
-          charCounter.offsetWidth,
-          0,
-          'char counter does not render on helper change');
-      assert.strictEqual(
-          helperText.offsetWidth, 0, 'helper line hides when reset to empty');
-
-      element.maxLength = 10;
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          1,
-          'foundation created when maxlength changed from -1');
-      assert.strictEqual(
-          charCounter.offsetWidth,
-          0,
-          'char counter does not render without charCounter set');
-      assert.strictEqual(
-          helperText.offsetWidth,
-          0,
-          'helper line does not render on maxLength change');
-
-      numTimesCreateFoundationCalled = 0;
-      element.maxLength = -1;
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          1,
-          'foundation created when maxlength changed to -1');
-
-      numTimesCreateFoundationCalled = 0;
-      element.charCounter = true;
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          0,
-          'foundation not updated when charCounter changed');
-      assert.strictEqual(
-          charCounter.offsetWidth,
-          0,
-          'char counter does not render without maxLength set');
-      assert.strictEqual(
-          helperText.offsetWidth,
-          0,
-          'helper line does not render on charCounter change');
-
-      element.maxLength = 20;
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          1,
-          'foundation created when maxlength changed from -1');
-      assert.isTrue(
-          charCounter.offsetWidth > 0,
-          'char counter renders when both charCounter and maxLength set');
-
-      numTimesCreateFoundationCalled = 0;
-      element.maxLength = 15;
-      await element.requestUpdate();
-
-      assert.strictEqual(
-          numTimesCreateFoundationCalled,
-          0,
-          'foundation not recreated when maxLength not changed to or from -1');
-      assert.isTrue(
-          charCounter.offsetWidth > 0,
-          'char counter still visible on maxLength change');
+      assert.isTrue(diff < 5);
     });
 
     teardown(() => {
@@ -677,5 +563,67 @@ suite('mwc-textfield:', () => {
       assert.isTrue(
           floatingLabel.classList.contains(floatingClasses.LABEL_FLOAT_ABOVE));
     });
+  });
+});
+
+suite('date type textfield', () => {
+  // IE 8-1 has no support for input[type=date]
+  // Feature detection to skip these unit tests in IE, they will always fail
+  if (window.MSInputMethodContext) {
+    return;
+  }
+
+  // Safari has no support for input[type=date]
+  // User Agent sniff to skip these unit tests in Safari, they will always fail
+  if (navigator.userAgent.indexOf('Safari') !== -1) {
+    return;
+  }
+
+  let fixt: TestFixture;
+  let element: TextField;
+
+  setup(async () => {
+    fixt = await fixture(asDateType);
+    element = fixt.root.querySelector('mwc-textfield')!;
+    await element.updateComplete;
+  });
+
+  teardown(() => {
+    if (fixt) {
+      fixt.remove();
+    }
+  });
+
+  test('will be valid with a date-string inside min-max range', async () => {
+    element.focus();
+    element.value = '2020-10-16';
+    element.blur();
+
+    await element.updateComplete;
+
+    assert.isTrue(element.checkValidity());
+    assert.isFalse(isUiInvalid(element));
+  });
+
+  test('will be invalid with a date-string before min', async () => {
+    element.focus();
+    element.value = '2019-10-16';
+    element.blur();
+
+    await element.updateComplete;
+
+    assert.isFalse(element.checkValidity());
+    assert.isTrue(isUiInvalid(element));
+  });
+
+  test('will be invalid with a date-string after max', async () => {
+    element.focus();
+    element.value = '2021-10-16';
+    element.blur();
+
+    await element.updateComplete;
+
+    assert.isFalse(element.checkValidity());
+    assert.isTrue(isUiInvalid(element));
   });
 });

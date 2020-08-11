@@ -1,10 +1,12 @@
-# Material Web Components [![Test Status](https://github.com/material-components/material-components-web-components/workflows/tests/badge.svg?branch=master)](https://github.com/material-components/material-components-web-components/actions?query=workflow%3Atests+branch%3Amaster)
+# Material Web Components [![Test Status](https://github.com/material-components/material-components-web-components/workflows/tests/badge.svg?branch=master)](https://github.com/material-components/material-components-web-components/actions?query=workflow%3Atests+branch%3Amaster) [![GitHub issues by-label](https://img.shields.io/github/issues-raw/material-components/material-components-web-components/Type:%20Bug)](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22)
 
 > IMPORTANT: The Material Web Components are a work in progress and subject to major changes until 1.0 release.
 
 The Material Web Components (MWC) are a collection of [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) maintained by Google that implement [Material Design](https://material.io/design/).
 
-[Demos on Glitch](https://mwc-demos.glitch.me/demos/)
+[API demos](https://material-components.github.io/material-components-web-components/demos/index.html)
+
+[Sandbox demo on Glitch](https://mwc-demos.glitch.me/)
 
 [Contributing Guide](#Contributing)
 
@@ -13,12 +15,13 @@ The Material Web Components (MWC) are a collection of [Web Components](https://d
 | Component | Status | Issues
 | ----------| ------ | ------
 | [`<mwc-button>`](https://github.com/material-components/material-components-web-components/tree/master/packages/button) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-button.svg)](https://www.npmjs.com/package/@material/mwc-button) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Button%22)
-| `<mwc-bottom-app-bar>` | [*Start in Q3-2020*](https://github.com/material-components/material-components-web-components/issues/298) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Bottom+App+Bar%22)
-| `<mwc-card>` | [*Start in Q3-2020*](https://github.com/material-components/material-components-web-components/issues/231) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Card%22)
+| `<mwc-bottom-app-bar>` | [*Start in Q4-2020*](https://github.com/material-components/material-components-web-components/issues/298) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Bottom+App+Bar%22)
+| `<mwc-card>` | [*Start in Q4-2020*](https://github.com/material-components/material-components-web-components/issues/231) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Card%22)
 | [`<mwc-checkbox>`](https://github.com/material-components/material-components-web-components/tree/master/packages/checkbox) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-checkbox.svg)](https://www.npmjs.com/package/@material/mwc-fab) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Checkbox%22)
-| `<mwc-chip>` | [*Start in Q3-2020*](https://github.com/material-components/material-components-web-components/issues/418) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Chip%22)
-| `<mwc-circular-progress>` | [*Start in Q3-2020*](https://github.com/material-components/material-components-web-components/issues/500) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Circular+Progress%22)
-| `<mwc-data-table>` | [*Start in Q3-2020*](https://github.com/material-components/material-components-web-components/issues/386) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Data+Table%22)
+| `<mwc-chip>` | [*Start in Q4-2020*](https://github.com/material-components/material-components-web-components/issues/418) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Chip%22)
+| [`<mwc-circular-progress>`](https://github.com/material-components/material-components-web-components/tree/master/packages/circular-progress) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-circular-progress.svg)](https://www.npmjs.com/package/@material/mwc-circular-progress) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Circular+Progress%22)
+| [`<mwc-circular-progress-four-color>`](https://github.com/material-components/material-components-web-components/tree/master/packages/circular-progress-four-color) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-circular-progress-four-color.svg)](https://www.npmjs.com/package/@material/mwc-circular-progress-four-color) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Circular+Progress%22)
+| `<mwc-data-table>` | [*Start in Q4-2020*](https://github.com/material-components/material-components-web-components/issues/386) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Data+Table%22)
 | [`<mwc-dialog>`](https://github.com/material-components/material-components-web-components/tree/master/packages/dialog) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-dialog.svg)](https://www.npmjs.com/package/@material/mwc-dialog) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Dialog%22)
 | [`<mwc-drawer>`](https://github.com/material-components/material-components-web-components/tree/master/packages/drawer) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-drawer.svg)](https://www.npmjs.com/package/@material/mwc-drawer) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Drawer%22)
 | [`<mwc-fab>`](https://github.com/material-components/material-components-web-components/tree/master/packages/fab) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-fab.svg)](https://www.npmjs.com/package/@material/mwc-fab) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Fab%22)
@@ -38,6 +41,7 @@ The Material Web Components (MWC) are a collection of [Web Components](https://d
 | [`<mwc-tab>`](https://github.com/material-components/material-components-web-components/tree/master/packages/tab) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-tab.svg)](https://www.npmjs.com/package/@material/mwc-tab) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Tab%22)
 | [`<mwc-textarea>`](https://github.com/material-components/material-components-web-components/tree/master/packages/textarea) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-textarea.svg)](https://www.npmjs.com/package/@material/mwc-textarea) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Text+Field%22)
 | [`<mwc-textfield>`](https://github.com/material-components/material-components-web-components/tree/master/packages/textfield) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-textfield.svg)](https://www.npmjs.com/package/@material/mwc-textfield) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Text+Field%22)
+| `<mwc-tooltip>` | [*TBD*](https://github.com/material-components/material-components-web-components/issues/1499) | [*Issues*](https://github.com/material-components/material-components-web-components/labels/Component%3A%20Tooltip)
 | [`<mwc-top-app-bar-fixed>`](https://github.com/material-components/material-components-web-components/tree/master/packages/top-app-bar-fixed) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-top-app-bar-fixed.svg)](https://www.npmjs.com/package/@material/mwc-top-app-bar-fixed) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Top+App+bar%22)
 | [`<mwc-top-app-bar>`](https://github.com/material-components/material-components-web-components/tree/master/packages/top-app-bar) | [![Published on npm](https://img.shields.io/npm/v/@material/mwc-top-app-bar.svg)](https://www.npmjs.com/package/@material/mwc-top-app-bar) | [*Issues*](https://github.com/material-components/material-components-web-components/issues?q=is%3Aissue+is%3Aopen+label%3A%22Component%3A+Top+App+Bar%22)
 
@@ -207,7 +211,7 @@ View the demos:
 
 ```sh
 npm run dev
-http://127.0.0.1:8001/demos
+http://127.0.0.1:8000/demos/
 ```
 
 Run all tests:

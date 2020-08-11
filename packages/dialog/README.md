@@ -9,6 +9,8 @@ Dialogs inform users about a task and can contain critical information, require 
 
 [Material Design Guidelines: dialogs](https://material.io/design/components/dialogs.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/dialog/)
+
 ## Installation
 
 ```sh
@@ -165,7 +167,7 @@ npm install @material/mwc-dialog
 ```html
 <style>
   .styled {
-    --mdc-dialog-shape-radius: 0px;
+    --mdc-shape-medium: 0px;
 
     /* color buttons */
     --mdc-theme-primary: #344955;
@@ -200,6 +202,49 @@ npm install @material/mwc-dialog
     Secondary
   </mwc-button>
 </mwc-dialog>
+```
+
+### Form Validation
+
+<img src="images/mwc-dialog_form-validation.gif" width="500px">
+
+```html
+<mwc-dialog id="dialog" heading="Form Validation">
+  <p>This dialog can validate user input before closing.</p>
+  <mwc-textfield
+    id="text-field"
+    minlength="3"
+    maxlength="64"
+    placeholder="First name"
+    required>
+  </mwc-textfield>
+  <mwc-button
+    id="primary-action-button"
+    slot="primaryAction">
+    Confirm
+  </mwc-button>
+  <mwc-button
+    slot="secondaryAction"
+    dialogAction="close">
+    Cancel
+  </mwc-button>
+</mwc-dialog>
+<script>
+  const dialog = document.querySelector('#dialog');
+  const textField = document.querySelector('#text-field');
+  const primaryButton = document.querySelector('#primary-action-button');
+
+  primaryButton.addEventListener('click', () => {
+    // validate, possible asynchronous such as a server response
+    const isValid = textField.checkValidity();
+    if (isValid) {
+      dialog.close();
+      return;
+    }
+
+    textField.reportValidity();
+  });
+</script>
 ```
 
 ## API
@@ -259,6 +304,7 @@ npm install @material/mwc-dialog
 | Name                                | Default               | Description
 | ----------------------------------- | --------------------- |------------
 | `--mdc-theme-surface`               | ![](images/color_fff.png) `#fff`                | Color of the dialog surface's background.
+| `--mdc-shape-medium`                | `4px`                 | Corner radius of the dialog surface.
 | `--mdc-dialog-scrim-color`          | ![](images/color_0,0,0,32.png) `rgba(0, 0, 0, 0.32)` | Color of the scrim. (**Note:** setting alpha to 0 will still make scrim clickable but transparent).
 | `--mdc-dialog-heading-ink-color`    | ![](images/color_0,0,0,87.png) `rgba(0, 0, 0, 0.87)` | Color of the heading text.
 | `--mdc-dialog-content-ink-color`    | ![](images/color_0,0,0,6.png) `rgba(0, 0, 0, 0.6)`  | Color applied to the projected content. (**Note:** it may also be possible to style the content via the light DOM since it is not encapsulated in a shadow root).
@@ -266,7 +312,6 @@ npm install @material/mwc-dialog
 | `--mdc-dialog-min-width`            | `280px`               | min-width ofthe dialog surface.
 | `--mdc-dialog-max-width`            | `560px`               | max-width of the dialog surface. (**Note:** if max-width is < `560px`, there is a visual jank bug that will occur causing the max width to be `560px` when the window is sized to <= than `560px`).
 | `--mdc-dialog-max-height`           | `calc(100% - 32px)`   | Max height of the dialog surface.
-| `--mdc-dialog-shape-radius`         | `4px`                 | Corner radius of the dialog surface.
 | `--mdc-dialog-box-shadow`           | mdc elevation 24      | Sets the box shadow of the dialog.
 
 #### Elevation values

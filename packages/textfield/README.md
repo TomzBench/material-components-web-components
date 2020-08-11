@@ -9,6 +9,8 @@ Text fields let users enter and edit text.
 
 [Material Design Guidelines: text fields](https://material.io/design/components/text-fields.html)
 
+[Demo](https://material-components.github.io/material-components-web-components/demos/textfield/)
+
 ## Installation
 
 ```sh
@@ -98,53 +100,22 @@ npm install @material/mwc-textfield
 </mwc-textfield>
 ```
 
-#### Shaping Outlined
+#### Shaped
 
-<img src="images/shape-left.png" width="244px">
-<img src="images/shape-right.png" width="244px">
-<img src="images/shape-left-right.png" width="244px">
+<img src="images/shape.png" width="233px">
 
 ```html
 <style>
-  mwc-textfield.left {
-    --mdc-notched-outline-leading-width: 28px;
-    --mdc-notched-outline-leading-border-radius: 28px 0 0 28px;
-  }
-
-  mwc-textfield.right {
-    --mdc-notched-outline-trailing-border-radius: 0 28px 28px 0;
+  mwc-textfield.rounded {
+    --mdc-shape-small: 28px;
   }
 </style>
 
 <mwc-textfield
-    class="left";
+    class="rounded"
     label="My Textfield"
-    iconTrailing="delete"
     outlined>
 </mwc-textfield>
-
-<mwc-textfield
-    class="right";
-    label="My Textfield"
-    iconTrailing="delete"
-    outlined>
-</mwc-textfield>
-
-<mwc-textfield
-    class="left right";
-    label="My Textfield"
-    iconTrailing="delete"
-    outlined>
-</mwc-textfield>
-```
-
-### Fullwidth
-
-<img src="images/fullwidth.png" width="777px">
-
-```html
-<!-- Note: Fullwidth does not support label; only placeholder -->
-<mwc-textfield fullwidth placeholder="Standard" helper="Helper Text"></mwc-textfield>
 ```
 
 ## API
@@ -164,7 +135,6 @@ Name                      | Type                          | Description
 `disabled`                | `boolean`                     | Whether or not the input should be disabled.
 `charCounter`             | `boolean`                     | **Note: requries `maxLength` to be set.** Display character counter with max length.
 `outlined`                | `boolean`                     | Whether or not to show the material outlined variant.
-`fullwidth`               | `boolean`                     | Whether or not to make the input fullwidth. No longer displays `label`; only `placeholder` and `helper`.
 `helper`                  | `string`                      | Helper text to display below the input. Display default only when focused.
 `helperPersistent`        | `boolean`                     | Always show the helper text despite focus.
 `required`                | `boolean`                     | Displays error state if value is empty and input is blurred.
@@ -180,6 +150,7 @@ Name                      | Type                          | Description
 `willValidate`            | `boolean` (readonly)          | [`HTMLInputElement.prototype.willValidate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#Properties)
 `validityTransform`       | `ValidityTransform**`\|`null` | Callback called before each validation check. See the [validation section](#Validation) for more details.
 `validateOnInitialRender` | `boolean`                     | Runs validation check on initial render.
+`name`                    | `string`                      | Sets the `name` attribute on the internal input.\*\*\*
 
 \*  `TextFieldType` is exported by `mwc-textfield` and `mwc-textfield-base`
 ```ts
@@ -191,6 +162,8 @@ type TextFieldType = 'text'|'search'|'tel'|'url'|'email'|'password'|
 ```ts
 type ValidityTransform = (value: string, nativeValidity: ValidityState) => Partial<ValidityState>
 ```
+
+\*\*\* The `name` property should only be used for browser autofill as webcomponent form participation does not currently consider the `name` attribute. See [#289](https://github.com/material-components/material-components-web-components/issues/289).
 
 ### Methods
 
